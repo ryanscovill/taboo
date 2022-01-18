@@ -1,0 +1,14 @@
+<div class="box">
+  <div class="form">
+    <form [formGroup]="startForm" (submit)="createGame()">
+      <div>
+        <mat-form-field class="form-input">
+          <input matInput placeholder="Name" formControlName="name">
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-raised-button [disabled]="startForm.invalid" type="submit">Create game</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div *ngIf="gameState === 'waiting'">
+  <button mat-raised-button (click)="joinTeam(1)">Team 1</button>
+  <button mat-raised-button (click)="joinTeam(2)">Team 2</button>
+
+  <h2>Team 1</h2>
+  <div *ngFor="let player of team1">
+    <p>{{player.name}}</p>
+  </div>
+
+  <h2>Team 2</h2>
+  <div *ngFor="let player of team2">
+    <p>{{player.name}}</p>
+  </div>
+
+  <button mat-raised-button (click)="startGame()">Start Game</button>
+</div>
+
+<div *ngIf="gameState === 'playing'">
+  <h2>Playing Game</h2>
+</div>
+
+
