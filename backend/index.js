@@ -1,4 +1,5 @@
 const app = require('express');
+const { clearInterval } = require('timers');
 const httpServer = require('http').createServer(app);
 const io = require('socket.io')(httpServer, {
     cors: true,
@@ -6,31 +7,35 @@ const io = require('socket.io')(httpServer, {
 });
 
 const games = [];
+const timers = {};
 
-const getNextPlayer = (game) => {
-    let i = game.players[game.currentPlayer];
-    i ++;
-    if (i === game.players.length - 1) {
+const getNextPlayer = (gameId) => {
+    let i = games[gameId].currentPlayer;
+    i++;
+    if (i === games[gameId].players.length) {
         i = 0;
     }
-    game.currentPlayer = i;
-    return game.currentPlayer;
+    return i;
 }
 
 const startRound = (gameId) => {
-    games[gameId].timer = 30;
-    updateTimer(gameId);
+    games[gameId].timer = 10;
+    timers[gameId] = setInterval(() => gameTick(gameId), 1000);
     return games[gameId];
 };
 
-const updateTimer = (gameId) => setInterval(function() {
+const gameTick = (gameId) => {
+    games[gameId].timer --;
+    if (games[gameId].timer < 1) {
+        clearInterval(timers[gameId]);
+        games[gameId].currentPlayer = getNextPlayer(gameId);
+        games[gameId].state = 'between_round';
+    }
     io.to(gameId).emit('gameUpdate', games[gameId]);
-}, 1000);
+};
 
 io.on("connection", (socket) => {
     console.log(" a user connected");
-
-
 
     socket.on('createGame', (data) => {
         const gameId = data.gameId;
