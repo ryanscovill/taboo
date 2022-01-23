@@ -50,7 +50,16 @@ export class GameComponent implements OnInit {
     this.socketIoService.receiveGameUpdate().subscribe((data: Game) => {
       console.log(data);
       this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
-      this.game = data;
+      let newGameUpdate = new Game(data);
+      if (this.game) {
+        if (newGameUpdate.turnScore > this.game.turnScore) {
+          this.messageList = [];
+          this.snackBar.open('Correct', '', {
+            duration: 500
+          })
+        }
+      }
+      this.game = newGameUpdate;
       this.myTurn = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].id === this.playerService.player.id;
       this.myTeam = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].team === this.playerService.player.team
       if (this.game.state === 'between_round') {

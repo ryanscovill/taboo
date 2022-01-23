@@ -1,5 +1,6 @@
 const app = require('express');
 const { clearInterval } = require('timers');
+const { WordHelper } = require('./util/words.js');
 const httpServer = require('http').createServer(app);
 const io = require('socket.io')(httpServer, {
     cors: true,
@@ -8,6 +9,7 @@ const io = require('socket.io')(httpServer, {
 
 const games = [];
 const timers = {};
+const wordHelper = new WordHelper();
 
 const getNextPlayer = (gameId) => {
     let i = games[gameId].currentPlayerIndex;
@@ -18,8 +20,8 @@ const getNextPlayer = (gameId) => {
     return i;
 }
 
-const getWord = () => {
-    return 'word' + Math.floor(Math.random() * 100);
+const setWord = (gameId) => {
+    games[gameId].word = wordHelper.getWord();
 }
 
 
@@ -27,7 +29,7 @@ const startTurn = (gameId) => {
     games[gameId].state = 'playing';
     games[gameId].turnScore = 0;
     games[gameId].timer = 1000;
-    games[gameId].word = getWord();
+    setWord(gameId);
     timers[gameId] = setInterval(() => gameTick(gameId), 1000);
     return games[gameId];
 };
@@ -46,9 +48,10 @@ const gameTick = (gameId) => {
     io.to(gameId).emit('gameUpdate', games[gameId]);
 };
 
-const joinTeam = (socket, gameId, playerId, team) => {
+const joinTeam = (gameId, playerId, team) => {
     games[gameId].players.find(player => player.id === playerId).team = team;
 };
+
 
 io.on("connection", (socket) => {
     console.log(" a user connected");
@@ -57,7 +60,7 @@ io.on("connection", (socket) => {
         const gameId = data.gameId;
         socket.join(gameId);
         games[gameId] = { players: [data.player], state: "waiting" };
-        joinTeam(socket, gameId, data.player.id, 1);
+        joinTeam(gameId, data.player.id, 1);
         socket.playerId = data.player.id;
         socket.gameId = gameId;
         io.to(gameId).emit('gameUpdate', games[gameId]);
@@ -81,7 +84,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on('joinTeam', ({ gameId, playerId, team }) => {
-        joinTeam(socket, gameId, playerId, team);
+        joinTeam(gameId, playerId, team);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
@@ -104,10 +107,10 @@ io.on("connection", (socket) => {
     socket.on('message', (data) => {
         const gameId = socket.gameId;
         io.to(gameId).emit('message', data.message);
-        if (data.message === games[gameId].word) {
+        if (data.message === games[gameId].word.word) {
             games[gameId].turnScore += 1;
             games[gameId].players[games[gameId].currentPlayerIndex].score += 1;
-            games[gameId].word = getWord();
+            setWord(gameId);
             io.to(gameId).emit('gameUpdate', games[gameId]);
         }
     });

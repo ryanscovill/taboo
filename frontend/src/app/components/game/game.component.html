@@ -1,4 +1,4 @@
-<div *ngIf="game.state === 'waiting'">
+<div *ngIf="game?.state === 'waiting'">
   <button mat-raised-button (click)="joinTeam(1)">Team 1</button>
   <button mat-raised-button (click)="joinTeam(2)">Team 2</button>
 
@@ -15,7 +15,7 @@
   <button mat-raised-button (click)="startGame()">Start Game</button>
 </div>
 
-<div *ngIf="game.state === 'playing'">
+<div *ngIf="game?.state === 'playing'">
   <h2>Playing Game</h2>
 
   <div *ngIf="myTeam">
@@ -24,12 +24,20 @@
 
   <div *ngIf="!myTeam">
     <h3>My Team is not playing</h3>
-    <p>Player is trying to get word: {{ game.word }}</p>
+    <p>Player is trying to get word: {{ game.word?.word }}</p>
+    <p>Cannot Say</p>
+    <div *ngFor="let hint of game.word?.hints">
+      <p>{{ hint }}</p>
+    </div>
   </div>
 
   <div *ngIf="myTurn">
     <h3>It's my turn</h3>
-    <p>The word is {{ game.word }}</p>
+    <p>The word is {{ game.word?.word }}</p>
+    <p>Cannot Say</p>
+    <div *ngFor="let hint of game.word?.hints">
+      <p>{{ hint }}</p>
+    </div>
     <button mat-raised-button (click)="skipTurn()">Skip My Turn</button>
   </div>
 
@@ -48,7 +56,7 @@
 
 </div>
 
-<div *ngIf="game.state === 'between_round'">
+<div *ngIf="game?.state === 'between_round'">
   <h2>Between Rounds</h2>
   <div *ngIf="myTurn">
     <button mat-raised-button (click)="startMyTurn()">Let's Go</button>

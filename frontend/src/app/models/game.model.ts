@@ -5,16 +5,16 @@ class Game {
   players: Player[];
   state: string;
   currentPlayerIndex: number;
-  word: string;
-  hints: string[];
+  turnScore: number;
+  word: { word: string, hints: string[] };
 
   constructor(game: any) {
       this.id = game.id;
-      this.players = game.player;
+      this.players = game.players;
       this.state = game.state;
       this.currentPlayerIndex = game.currentPlayerIndex;
+      this.turnScore = game.turnScore;
       this.word = game.word;
-      this.hints = game.hints;
   }
 
   get team1(): Player[] {

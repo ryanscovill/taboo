@@ -1,6 +1,5 @@
-import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { Player } from '../models/player.model';
