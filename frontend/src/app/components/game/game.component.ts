@@ -17,6 +17,8 @@ export class GameComponent implements OnInit {
   myTeam: boolean;
   team1: Player[] = [];
   team2: Player[] = [];
+  messageList: string[] = [];
+  newMessage: string;
 
   constructor(
     private socketIoService: SocketioService,
@@ -32,6 +34,9 @@ export class GameComponent implements OnInit {
     }
     this.receiveJoinedPlayers();
     this.receiveGameUpdate();
+    this.socketIoService.getMessage().subscribe((message: string) => {
+      this.messageList.push(message);
+    });
   }
 
   receiveJoinedPlayers() {
@@ -45,11 +50,15 @@ export class GameComponent implements OnInit {
   receiveGameUpdate() {
     this.socketIoService.receiveGameUpdate().subscribe((data: { players: Player[], state: string, currentPlayerIndex: number }) => {
       console.log(data);
+      this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
       this.gameState = data.state;
       this.team1 = data.players.filter(player => player.team === 1);
       this.team2 = data.players.filter(player => player.team === 2);
       this.myTurn = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].id === this.playerService.player.id;
-      this.myTeam = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].team === data.players.filter(p => p.id === this.playerService.player.id)[0].team
+      this.myTeam = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].team === this.playerService.player.team
+      if (this.gameState === 'between_round') {
+        this.messageList = [];
+      }
     });
   }
 
@@ -67,6 +76,11 @@ export class GameComponent implements OnInit {
 
   skipTurn() {
     this.socketIoService.skipTurn(this.gameId);
+  }
+
+  sendMessage() {
+    this.socketIoService.sendMessage(this.gameId, this.playerService.player.team, this.newMessage);
+    this.newMessage = '';
   }
 
 }

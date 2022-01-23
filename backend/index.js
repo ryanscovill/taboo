@@ -41,14 +41,18 @@ const gameTick = (gameId) => {
     io.to(gameId).emit('gameUpdate', games[gameId]);
 };
 
+const joinTeam = (socket, gameId, playerId, team) => {
+    games[gameId].players.find(player => player.id === playerId).team = team;
+};
+
 io.on("connection", (socket) => {
     console.log(" a user connected");
 
     socket.on('createGame', (data) => {
         const gameId = data.gameId;
         socket.join(gameId);
-        data.player.team = 1;
         games[gameId] = { players: [data.player], state: "waiting" };
+        joinTeam(socket, gameId, data.player.id, 1);
         socket.playerId = data.player.id;
         socket.gameId = gameId;
         io.to(gameId).emit('gameUpdate', games[gameId]);
@@ -72,7 +76,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on('joinTeam', ({ gameId, playerId, team }) => {
-        games[gameId].players.find(player => player.id === playerId).team = team;
+        joinTeam(socket, gameId, playerId, team);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
@@ -90,7 +94,11 @@ io.on("connection", (socket) => {
         const gameId = data.gameId;
         games[gameId] = startRound(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
+    });
 
+    socket.on('message', (data) => {
+        const gameId = socket.gameId;
+        io.to(gameId).emit('message', data.message);
     });
 
     socket.on('skipTurn', (data) => {

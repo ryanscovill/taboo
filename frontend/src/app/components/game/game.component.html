@@ -35,6 +35,15 @@
     <h3>It's not my turn</h3>
   </div>
 
+  <div *ngFor="let m of messageList">
+    <p>{{m}}</p>
+  </div>
+
+  <div *ngIf="myTeam && !myTurn">
+    <input [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
+    <button mat-raised-button (click)="sendMessage()">Guess</button>
+  </div>
+
 </div>
 
 <div *ngIf="gameState === 'between_round'">

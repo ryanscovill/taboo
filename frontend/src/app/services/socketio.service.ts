@@ -1,5 +1,6 @@
+import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { Player } from '../models/player.model';
@@ -10,6 +11,7 @@ import { Player } from '../models/player.model';
 export class SocketioService {
 
   socket!: Socket;
+  private message$ = new ReplaySubject<string>(1);
 
   constructor() {
     this.socket = io(environment.SOCKET_ENDPOINT);
@@ -53,5 +55,16 @@ export class SocketioService {
 
   skipTurn(gameId: string) {
     this.socket.emit('skipTurn', { gameId: gameId });
+  }
+
+  sendMessage(gameId: string, team: number, message: string) {
+    this.socket.emit('message', { gameId: gameId, team: team, message: message });
+  }
+
+  getMessage() {
+      this.socket.on('message', (data) => {
+        this.message$.next(data);
+      });
+      return this.message$;
   }
 }
