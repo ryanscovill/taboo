@@ -18,11 +18,16 @@ const getNextPlayer = (gameId) => {
     return i;
 }
 
+const getWord = () => {
+    return 'word' + Math.floor(Math.random() * 100);
+}
 
-const startRound = (gameId) => {
+
+const startTurn = (gameId) => {
     games[gameId].state = 'playing';
-    games[gameId].roundScore = 0;
+    games[gameId].turnScore = 0;
     games[gameId].timer = 1000;
+    games[gameId].word = getWord();
     timers[gameId] = setInterval(() => gameTick(gameId), 1000);
     return games[gameId];
 };
@@ -86,19 +91,25 @@ io.on("connection", (socket) => {
             player.score = 0;
         });
         games[gameId].currentPlayerIndex = 0;
-        games[gameId] = startRound(gameId);
+        games[gameId] = startTurn(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
     socket.on('startTurn', (data) => {
         const gameId = data.gameId;
-        games[gameId] = startRound(gameId);
+        games[gameId] = startTurn(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
     socket.on('message', (data) => {
         const gameId = socket.gameId;
         io.to(gameId).emit('message', data.message);
+        if (data.message === games[gameId].word) {
+            games[gameId].turnScore += 1;
+            games[gameId].players[games[gameId].currentPlayerIndex].score += 1;
+            games[gameId].word = getWord();
+            io.to(gameId).emit('gameUpdate', games[gameId]);
+        }
     });
 
     socket.on('skipTurn', (data) => {

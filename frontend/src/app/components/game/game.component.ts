@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Game } from 'src/app/models/game.model';
 import { Player } from 'src/app/models/player.model';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { SocketioService } from 'src/app/services/socketio.service';
@@ -12,11 +13,9 @@ import { SocketioService } from 'src/app/services/socketio.service';
 })
 export class GameComponent implements OnInit {
   gameId: string;
-  gameState: string;
+  game: Game;
   myTurn: boolean;
   myTeam: boolean;
-  team1: Player[] = [];
-  team2: Player[] = [];
   messageList: string[] = [];
   newMessage: string;
 
@@ -48,15 +47,13 @@ export class GameComponent implements OnInit {
   };
 
   receiveGameUpdate() {
-    this.socketIoService.receiveGameUpdate().subscribe((data: { players: Player[], state: string, currentPlayerIndex: number }) => {
+    this.socketIoService.receiveGameUpdate().subscribe((data: Game) => {
       console.log(data);
       this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
-      this.gameState = data.state;
-      this.team1 = data.players.filter(player => player.team === 1);
-      this.team2 = data.players.filter(player => player.team === 2);
+      this.game = data;
       this.myTurn = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].id === this.playerService.player.id;
       this.myTeam = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].team === this.playerService.player.team
-      if (this.gameState === 'between_round') {
+      if (this.game.state === 'between_round') {
         this.messageList = [];
       }
     });
