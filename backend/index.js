@@ -10,7 +10,7 @@ const games = [];
 const timers = {};
 
 const getNextPlayer = (gameId) => {
-    let i = games[gameId].currentPlayer;
+    let i = games[gameId].currentPlayerIndex;
     i++;
     if (i === games[gameId].players.length) {
         i = 0;
@@ -28,7 +28,7 @@ const gameTick = (gameId) => {
     games[gameId].timer --;
     if (games[gameId].timer < 1) {
         clearInterval(timers[gameId]);
-        games[gameId].currentPlayer = getNextPlayer(gameId);
+        games[gameId].currentPlayerIndex = getNextPlayer(gameId);
         games[gameId].state = 'between_round';
     }
     io.to(gameId).emit('gameUpdate', games[gameId]);
@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
         games[gameId].players.forEach(player => {
             player.score = 0;
         });
-        games[gameId].currentPlayer = 0;
+        games[gameId].currentPlayerIndex = 0;
         games[gameId] = startRound(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });

@@ -16,4 +16,8 @@ export class PlayerService {
     }
     return this.player;
   }
+
+  updateTeam(team: number) {
+    this.player.team = team;
+  }
 }

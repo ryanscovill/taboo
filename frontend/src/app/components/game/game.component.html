@@ -17,6 +17,23 @@
 
 <div *ngIf="gameState === 'playing'">
   <h2>Playing Game</h2>
+
+  <div *ngIf="myTeam">
+    <h3>My Team is playing</h3>
+  </div>
+
+  <div *ngIf="!myTeam">
+    <h3>My Team is not playing</h3>
+  </div>
+
+  <div *ngIf="myTurn">
+    <h3>It's my turn</h3>
+  </div>
+
+  <div *ngIf="!myTurn">
+    <h3>It's not my turn</h3>
+  </div>
+
 </div>
 
 

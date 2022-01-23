@@ -13,6 +13,8 @@ import { SocketioService } from 'src/app/services/socketio.service';
 export class GameComponent implements OnInit {
   gameId: string;
   gameState: string;
+  myTurn: boolean;
+  myTeam: boolean;
   team1: Player[] = [];
   team2: Player[] = [];
 
@@ -41,11 +43,13 @@ export class GameComponent implements OnInit {
   };
 
   receiveGameUpdate() {
-    this.socketIoService.receiveGameUpdate().subscribe((data: { players: Player[], state: string }) => {
+    this.socketIoService.receiveGameUpdate().subscribe((data: { players: Player[], state: string, currentPlayerIndex: number }) => {
       console.log(data);
       this.gameState = data.state;
       this.team1 = data.players.filter(player => player.team === 1);
       this.team2 = data.players.filter(player => player.team === 2);
+      this.myTurn = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].id === this.playerService.player.id;
+      this.myTeam = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].team === data.players.filter(p => p.id === this.playerService.player.id)[0].team
     });
   }
 
