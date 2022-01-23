@@ -13,6 +13,7 @@ export class PlayerService {
   createPlayer(name: string) {
     if (!this.player) {
       this.player = new Player({id: uuidv4(), name: name});
+      localStorage.setItem('player', this.player.id);
     }
     return this.player;
   }

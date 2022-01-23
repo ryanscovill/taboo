@@ -18,18 +18,25 @@ const getNextPlayer = (gameId) => {
     return i;
 }
 
+
 const startRound = (gameId) => {
-    games[gameId].timer = 10;
+    games[gameId].state = 'playing';
+    games[gameId].roundScore = 0;
+    games[gameId].timer = 1000;
     timers[gameId] = setInterval(() => gameTick(gameId), 1000);
     return games[gameId];
 };
 
+const turnEnded = (gameId) => {
+    clearInterval(timers[gameId]);
+    games[gameId].currentPlayerIndex = getNextPlayer(gameId);
+    games[gameId].state = 'between_round';
+}
+
 const gameTick = (gameId) => {
     games[gameId].timer --;
     if (games[gameId].timer < 1) {
-        clearInterval(timers[gameId]);
-        games[gameId].currentPlayerIndex = getNextPlayer(gameId);
-        games[gameId].state = 'between_round';
+       turnEnded(gameId);
     }
     io.to(gameId).emit('gameUpdate', games[gameId]);
 };
@@ -71,12 +78,24 @@ io.on("connection", (socket) => {
 
     socket.on('startGame', (data) => {
         const gameId = data.gameId;
-        games[gameId].state = "playing";
         games[gameId].players.forEach(player => {
             player.score = 0;
         });
         games[gameId].currentPlayerIndex = 0;
         games[gameId] = startRound(gameId);
+        io.to(gameId).emit('gameUpdate', games[gameId]);
+    });
+
+    socket.on('startTurn', (data) => {
+        const gameId = data.gameId;
+        games[gameId] = startRound(gameId);
+        io.to(gameId).emit('gameUpdate', games[gameId]);
+
+    });
+
+    socket.on('skipTurn', (data) => {
+        const gameId = data.gameId;
+        turnEnded(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 

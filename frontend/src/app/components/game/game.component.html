@@ -28,12 +28,20 @@
 
   <div *ngIf="myTurn">
     <h3>It's my turn</h3>
+    <button mat-raised-button (click)="skipTurn()">Skip My Turn</button>
   </div>
 
   <div *ngIf="!myTurn">
     <h3>It's not my turn</h3>
   </div>
 
+</div>
+
+<div *ngIf="gameState === 'between_round'">
+  <h2>Between Rounds</h2>
+  <div *ngIf="myTurn">
+    <button mat-raised-button (click)="startMyTurn()">Let's Go</button>
+  </div>
 </div>
 
 

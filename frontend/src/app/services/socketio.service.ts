@@ -46,4 +46,12 @@ export class SocketioService {
   startGame(gameId: string) {
     this.socket.emit('startGame', { gameId: gameId });
   }
+
+  startMyTurn(gameId: string) {
+    this.socket.emit('startTurn', { gameId: gameId });
+  }
+
+  skipTurn(gameId: string) {
+    this.socket.emit('skipTurn', { gameId: gameId });
+  }
 }
