@@ -24,6 +24,14 @@ class Game {
   get team2(): Player[] {
     return this.players.filter(player => player.team === 2);
   }
+
+  get team1Score(): number {
+    return this.team1.reduce((score, player) => score + player.score, 0);
+  }
+
+  get team2Score(): number {
+    return this.team2.reduce((score, player) => score + player.score, 0);
+  }
 }
 
 export { Game };

@@ -53,6 +53,9 @@
 
   <div *ngIf="game?.state === 'between_round'">
     <h2>Between Rounds</h2>
+    <div>Turn Score: {{game?.turnScore}}</div>
+    <div>Team 1 Score: {{game?.team1Score}} </div>
+    <div>Team 2 Score: {{game?.team2Score}} </div>
     <div *ngIf="myTurn">
       <button mat-raised-button (click)="startMyTurn()">Let's Go</button>
     </div>
@@ -66,7 +69,7 @@
 </div>
 
 
-<div>
+<div *ngIf="game?.state === 'playing'">
   <button *ngIf="myTurn" mat-raised-button (click)="skipTurn()">Skip My Turn</button>
 </div>
 
