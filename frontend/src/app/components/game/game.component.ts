@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Game } from 'src/app/models/game.model';
@@ -12,6 +12,8 @@ import { SocketioService } from 'src/app/services/socketio.service';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
+  @ViewChild('messageListElement') private scrollContainer: ElementRef;
+
   gameId: string;
   game: Game;
   myTurn: boolean;
@@ -35,6 +37,7 @@ export class GameComponent implements OnInit {
     this.receiveGameUpdate();
     this.socketIoService.getMessage().subscribe((message: string) => {
       this.messageList.push(message);
+      setTimeout(() => this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight);
     });
   }
 
@@ -85,8 +88,10 @@ export class GameComponent implements OnInit {
   }
 
   sendMessage() {
-    this.socketIoService.sendMessage(this.gameId, this.playerService.player.team, this.newMessage);
-    this.newMessage = '';
+    if (this.newMessage) {
+      this.socketIoService.sendMessage(this.gameId, this.playerService.player.team, this.newMessage);
+      this.newMessage = '';
+    }
   }
 
 }

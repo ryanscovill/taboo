@@ -1,0 +1,100 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.start-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-input {
+  min-width: 15em;
+}
+
+.team-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  width: 100%;
+
+  .team-title {
+    grid-row: 1;
+  }
+
+  .players {
+    grid-row: 2;
+    margin-bottom: 10px;
+  }
+
+  .button-container {
+    grid-row: 3;
+  }
+}
+
+.start {
+  margin-top: 20px;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.messages {
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.player-container {
+  display: flex;
+
+  .messages {
+    margin-left: 15px;
+    width: 200px;
+  }
+}
+
+.card {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 10px 0 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  .word, .hint {
+    padding: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 15px;
+  }
+
+  .word {
+    padding: 10px;
+    background-color: #F26970;
+    color: #fff;
+    margin-bottom: 5px;
+  }
+}

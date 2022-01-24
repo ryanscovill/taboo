@@ -1,66 +1,72 @@
+<div class="container">
+  <div class="start-container" *ngIf="game?.state === 'waiting'">
+    <div class="team-container">
+      <div class="team-title"><h2>Team 1</h2></div>
+      <div class="players">
+        <div class="player-item" *ngFor="let player of game.team1">{{player.name}}</div>
+      </div>
+      <div class="button-container"><button mat-raised-button (click)="joinTeam(1)">Join</button></div>
+      <div class="team-title"><h2>Team 2</h2></div>
+      <div class="players">
+        <div class="player-item" *ngFor="let player of game.team2">{{player.name}}</div>
+      </div>
+      <div class="button-container"><button mat-raised-button (click)="joinTeam(2)">Join</button></div>
+    </div>
+  </div>
+  <div class="playing-container" *ngIf="game?.state === 'playing'">
+    <div *ngIf="!myTeam">
+      <div class="center"><h3>Player should not say</h3></div>
+      <div class="card">
+        <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+      </div>
+    </div>
+
+    <div *ngIf="myTurn">
+      <div class="center"><h2>You're Up!</h2></div>
+      <div class="player-container">
+        <div class="card">
+          <div class="word">{{ game.word?.word }}</div>
+          <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+        </div>
+        <div *ngIf="myTeam" class="message-container">
+          <div class="messages" #messageListElement>
+            <p *ngFor="let m of messageList">{{m}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!myTurn && myTeam">
+      <h3>Guess!</h3>
+      <div *ngIf="myTeam" class="message-container">
+        <div class="messages" #messageListElement>
+          <p *ngFor="let m of messageList">{{m}}</p>
+        </div>
+
+        <div>
+          <input [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
+          <button mat-raised-button (click)="sendMessage()">Guess</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="game?.state === 'between_round'">
+    <h2>Between Rounds</h2>
+    <div *ngIf="myTurn">
+      <button mat-raised-button (click)="startMyTurn()">Let's Go</button>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="game?.state === 'waiting'">
-  <button mat-raised-button (click)="joinTeam(1)">Team 1</button>
-  <button mat-raised-button (click)="joinTeam(2)">Team 2</button>
-
-  <h2>Team 1</h2>
-  <div *ngFor="let player of game.team1">
-    <p>{{player.name}}</p>
-  </div>
-
-  <h2>Team 2</h2>
-  <div *ngFor="let player of game.team2">
-    <p>{{player.name}}</p>
-  </div>
-
-  <button mat-raised-button (click)="startGame()">Start Game</button>
-</div>
-
-<div *ngIf="game?.state === 'playing'">
-  <h2>Playing Game</h2>
-
-  <div *ngIf="myTeam">
-    <h3>My Team is playing</h3>
-  </div>
-
-  <div *ngIf="!myTeam">
-    <h3>My Team is not playing</h3>
-    <p>Player is trying to get word: {{ game.word?.word }}</p>
-    <p>Cannot Say</p>
-    <div *ngFor="let hint of game.word?.hints">
-      <p>{{ hint }}</p>
-    </div>
-  </div>
-
-  <div *ngIf="myTurn">
-    <h3>It's my turn</h3>
-    <p>The word is {{ game.word?.word }}</p>
-    <p>Cannot Say</p>
-    <div *ngFor="let hint of game.word?.hints">
-      <p>{{ hint }}</p>
-    </div>
-    <button mat-raised-button (click)="skipTurn()">Skip My Turn</button>
-  </div>
-
-  <div *ngIf="!myTurn">
-    <h3>It's not my turn</h3>
-  </div>
-
-  <div *ngFor="let m of messageList">
-    <p>{{m}}</p>
-  </div>
-
-  <div *ngIf="myTeam && !myTurn">
-    <input [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
-    <button mat-raised-button (click)="sendMessage()">Guess</button>
-  </div>
-
-</div>
-
-<div *ngIf="game?.state === 'between_round'">
-  <h2>Between Rounds</h2>
-  <div *ngIf="myTurn">
-    <button mat-raised-button (click)="startMyTurn()">Let's Go</button>
+  <div class="start">
+    <button mat-raised-button (click)="startGame()">Start Game</button>
   </div>
 </div>
 
+
+<div>
+  <button *ngIf="myTurn" mat-raised-button (click)="skipTurn()">Skip My Turn</button>
+</div>
 
