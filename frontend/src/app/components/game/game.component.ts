@@ -18,6 +18,7 @@ export class GameComponent implements OnInit {
   game: Game;
   myTurn: boolean;
   myTeam: boolean;
+  currentPlayer: Player;
   messageList: string[] = [];
   newMessage: string;
 
@@ -71,8 +72,11 @@ export class GameComponent implements OnInit {
         }
       }
       this.game = newGameUpdate;
-      this.myTurn = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].id === this.playerService.player.id;
-      this.myTeam = (data.currentPlayerIndex !== undefined) && data.players[data.currentPlayerIndex].team === this.playerService.player.team
+      if (data.currentPlayerIndex !== undefined) {
+        this.currentPlayer = data.players[data.currentPlayerIndex];
+        this.myTurn = this.currentPlayer.id === this.playerService.player.id;
+        this.myTeam = this.currentPlayer.team === this.playerService.player.team
+      }
       if (this.game.state === 'between_round') {
         this.messageList = [];
       }
