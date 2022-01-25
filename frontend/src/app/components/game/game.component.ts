@@ -37,7 +37,12 @@ export class GameComponent implements OnInit {
     this.receiveGameUpdate();
     this.socketIoService.getMessage().subscribe((message: string) => {
       this.messageList.push(message);
-      setTimeout(() => this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight);
+      if (this.scrollContainer) {
+        setTimeout(() => this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight);
+      }
+    });
+    this.socketIoService.receiveNotification().subscribe((action: string) => {
+      console.log(action);
     });
   }
 
@@ -60,6 +65,9 @@ export class GameComponent implements OnInit {
           this.snackBar.open('Correct', '', {
             duration: 500
           })
+        }
+        if (newGameUpdate.word?.word !== this.game?.word?.word) {
+          this.messageList = [];
         }
       }
       this.game = newGameUpdate;
@@ -87,11 +95,46 @@ export class GameComponent implements OnInit {
     this.socketIoService.skipTurn(this.gameId);
   }
 
+  skipWord() {
+    this.socketIoService.skipWord(this.gameId);
+  }
+
+  badWord() {
+    this.socketIoService.badWord(this.gameId);
+  }
+
   sendMessage() {
     if (this.newMessage) {
       this.socketIoService.sendMessage(this.gameId, this.playerService.player.team, this.newMessage);
       this.newMessage = '';
     }
+  }
+
+  formatSeconds(timeInSeconds: number): string {
+    const str_pad_left = (string,pad,length) => {
+      return (new Array(length+1).join(pad)+string).slice(-length);
+    }
+    if(this.game?.timer) {
+      let minutes = Math.floor(timeInSeconds / 60);
+      var seconds = timeInSeconds - minutes * 60;
+      return str_pad_left(minutes,'0',2)+':'+str_pad_left(seconds,'0',2);
+    }
+    return '';
+  }
+
+  get title(): string {
+    if (this.game?.state === 'playing') {
+      if (this.myTurn) {
+        return 'Your Turn';
+      }
+      if (this.myTeam && !this.myTurn) {
+        return 'Guess';
+      }
+      if (!this.myTeam) {
+        return 'Listen';
+      }
+    }
+    return '';
   }
 
 }

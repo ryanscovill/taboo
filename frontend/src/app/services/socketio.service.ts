@@ -44,6 +44,14 @@ export class SocketioService {
     });
   }
 
+  receiveNotification() {
+    return new Observable((observer) => {
+      this.socket.on('notification', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
   startGame(gameId: string) {
     this.socket.emit('startGame', { gameId: gameId });
   }
@@ -55,6 +63,14 @@ export class SocketioService {
   skipTurn(gameId: string) {
     this.socket.emit('skipTurn', { gameId: gameId });
   }
+
+  skipWord(gameId: string) {
+    this.socket.emit('skipWord', { gameId: gameId });
+  }
+
+  badWord(gameId: string) {
+    this.socket.emit('badWord', { gameId: gameId });
+  };
 
   sendMessage(gameId: string, team: number, message: string) {
     this.socket.emit('message', { gameId: gameId, team: team, message: message });

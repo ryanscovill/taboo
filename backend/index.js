@@ -50,6 +50,7 @@ const gameTick = (gameId) => {
 
 const joinTeam = (gameId, playerId, team) => {
     games[gameId].players.find(player => player.id === playerId).team = team;
+    games[gameId].players.find(player => player.id === playerId).score = 0;
 };
 
 
@@ -101,6 +102,20 @@ io.on("connection", (socket) => {
     socket.on('startTurn', (data) => {
         const gameId = data.gameId;
         games[gameId] = startTurn(gameId);
+        io.to(gameId).emit('gameUpdate', games[gameId]);
+    });
+
+    socket.on('skipWord', (data) => {
+        const gameId = data.gameId;
+        setWord(gameId);
+        io.to(gameId).emit('notification', 'skipped_word');
+        io.to(gameId).emit('gameUpdate', games[gameId]);
+    });
+
+    socket.on('badWord', (data) => {
+        const gameId = data.gameId;
+        setWord(gameId);
+        io.to(gameId).emit('notification', 'bad_word');
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 

@@ -1,3 +1,4 @@
+<div class="title center"><h1>{{title}}</h1></div>
 <div class="container">
   <div class="start-container" *ngIf="game?.state === 'waiting'">
     <div class="team-container">
@@ -14,19 +15,22 @@
     </div>
   </div>
   <div class="playing-container" *ngIf="game?.state === 'playing'">
+    <div class="timer">{{formatSeconds(game?.timer)}}</div>
     <div *ngIf="!myTeam">
-      <div class="center"><h3>Player should not say</h3></div>
       <div class="card">
         <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
       </div>
+      <div class="center btn-row"><button mat-raised-button (click)="badWord()">Said it!</button></div>
     </div>
 
     <div *ngIf="myTurn">
-      <div class="center"><h2>You're Up!</h2></div>
       <div class="player-container">
-        <div class="card">
-          <div class="word">{{ game.word?.word }}</div>
-          <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+        <div class="card-container">
+          <div class="card">
+            <div class="word">{{ game.word?.word }}</div>
+            <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+          </div>
+          <button mat-raised-button (click)="skipWord()">Skip</button>
         </div>
         <div *ngIf="myTeam" class="message-container">
           <div class="messages" #messageListElement>
@@ -37,7 +41,6 @@
     </div>
 
     <div *ngIf="!myTurn && myTeam">
-      <h3>Guess!</h3>
       <div *ngIf="myTeam" class="message-container">
         <div class="messages" #messageListElement>
           <p *ngFor="let m of messageList">{{m}}</p>
@@ -69,7 +72,7 @@
 </div>
 
 
-<div *ngIf="game?.state === 'playing'">
+<div class="skip-turn" *ngIf="game?.state === 'playing'">
   <button *ngIf="myTurn" mat-raised-button (click)="skipTurn()">Skip My Turn</button>
 </div>
 

@@ -6,6 +6,7 @@ class Game {
   state: string;
   currentPlayerIndex: number;
   turnScore: number;
+  timer: number;
   word: { word: string, hints: string[] };
 
   constructor(game: any) {
@@ -15,6 +16,7 @@ class Game {
       this.currentPlayerIndex = game.currentPlayerIndex;
       this.turnScore = game.turnScore;
       this.word = game.word;
+      this.timer = game.timer;
   }
 
   get team1(): Player[] {

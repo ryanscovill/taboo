@@ -9,14 +9,24 @@
 .container {
   width: 100%;
   max-width: 600px;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: #fff;
+  background: rgb(255, 241, 252);
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.timer {
+  font-size: 2em;
+  font-weight: bold;
+  color: #500131;
+  margin-bottom: 5px;
+  text-align: center;
+  margin: 10px 0 30px 0;
 }
 
 .start-container {
@@ -55,19 +65,49 @@
   margin-top: 20px;
 }
 
+.btn-row {
+  margin-top: 15px;
+}
+
 .center {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+}
+
+.title {
+  color: #fff;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 500;
+  }
 }
 
 .messages {
   height: 300px;
   overflow-y: scroll;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 }
 
 .player-container {
   display: flex;
+
+  .card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-top: 10px;
+    }
+  }
 
   .messages {
     margin-left: 15px;
@@ -85,10 +125,10 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   .word, .hint {
-    padding: 5px;
+    padding: 8px;
     text-align: center;
     text-transform: uppercase;
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .word {
@@ -96,5 +136,12 @@
     background-color: #F26970;
     color: #fff;
     margin-bottom: 5px;
+    font-size: 18px;
   }
+}
+
+.skip-turn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
