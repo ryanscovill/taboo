@@ -8,35 +8,7 @@
 
 .game-container {
   display: grid;
-  column-gap: 20px;
-}
-
-.card.players-container {
-  padding: 5px;
-  grid-column: 1;
-  grid-row: 2;
-  min-width: 200px;
-
-  .players-list {
-
-    .player-item {
-      padding: 10px;
-      display: flex;
-      font-size: 15px;
-      border-bottom: 1px solid #d1a8c1;
-
-      &.current-player {
-        background-color: #F26970;
-        border-radius: 5px;
-        color: white;
-      }
-
-      .player-score {
-        margin-left: auto;
-        text-align: right;
-      }
-    }
-  }
+  column-gap: 25px;
 }
 
 .card {
@@ -44,6 +16,10 @@
   background: rgb(255, 241, 252);
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.card.players-card {
+  padding: 5px;
 }
 
 .card-container {
@@ -55,20 +31,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.score {
-  position: absolute;
-  left: 1em;
-  top: 1em;
-  font-size: 20px;
-  border-radius: 50%;
-  padding: .5em;
-  background-color: #F26970;
-  color: #fff;
-  width: 2em;
-  height: 2em;
-  text-align: center;
 }
 
 .timer {
@@ -97,6 +59,7 @@
   grid-template-columns: 1fr 1fr;
   justify-items: center;
   width: 100%;
+  min-width: 500px;
 
   .team-title {
     grid-row: 1;

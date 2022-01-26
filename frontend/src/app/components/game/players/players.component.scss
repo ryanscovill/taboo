@@ -1,0 +1,39 @@
+.players-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+
+  .team-title {
+    font-size: 17px;
+    text-align: center;
+    padding: 10px;
+
+    &.current-team {
+      background-color: #aa347b;
+      color: #fff;
+    }
+  }
+
+  .team-score {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 25px;
+    margin-bottom: 35px;
+  }
+
+
+  .players-list {
+
+    .player-item {
+      padding: 10px;
+      font-size: 15px;
+
+      &.current-player {
+        background-color: #aa347b;
+        border-radius: 5px;
+        color: white;
+      }
+    }
+  }
+}

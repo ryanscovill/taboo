@@ -23,8 +23,8 @@ export class GameComponent implements OnInit {
   newMessage: string;
 
   constructor(
+    public playerService: PlayerService,
     private socketIoService: SocketioService,
-    private playerService: PlayerService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) { }

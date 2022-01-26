@@ -10,6 +10,7 @@ const io = require('socket.io')(httpServer, {
 const games = [];
 const timers = {};
 const wordHelper = new WordHelper();
+const TIME_PER_TURN = 1000;
 
 const getNextPlayer = (gameId) => {
     let i = games[gameId].currentPlayerIndex;
@@ -28,7 +29,7 @@ const setWord = (gameId) => {
 const startTurn = (gameId) => {
     games[gameId].state = 'playing';
     games[gameId].turnScore = 0;
-    games[gameId].timer = 1000;
+    games[gameId].timer = TIME_PER_TURN;
     setWord(gameId);
     timers[gameId] = setInterval(() => gameTick(gameId), 1000);
     return games[gameId];
