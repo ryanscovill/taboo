@@ -62,9 +62,8 @@
             <p *ngFor="let m of messageList"><strong>{{m.playerName}}</strong> : {{m.message}}</p>
           </div>
 
-          <div>
-            <input [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
-            <button mat-raised-button (click)="sendMessage()">Guess</button>
+          <div class="message-input">
+            <input autofocus [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
           </div>
         </div>
       </div>
@@ -75,7 +74,10 @@
         <div><h3>Turn Points: {{game?.turnScore}}</h3></div>
         <div *ngIf="myTurn">
           <h1>You're turn next</h1>
-          <button mat-raised-button (click)="startMyTurn()">Let's Go</button>
+          <button mat-raised-button (click)="startMyTurn()" color="primary">Let's Go</button>
+        </div>
+        <div *ngIf="!myTurn">
+          <h1>Waiting for {{game?.currentPlayer.name}} to start...</h1>
         </div>
       </div>
     </div>

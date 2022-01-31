@@ -23,7 +23,7 @@ export class JoinDialogComponent implements OnInit {
       });
   }
 
-  save() {
+  join() {
     if(this.form.valid) {
       this.dialogRef.close(this.form.value);
     }

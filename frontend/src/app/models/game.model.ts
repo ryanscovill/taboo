@@ -34,6 +34,10 @@ class Game {
   get team2Score(): number {
     return this.team2.reduce((score, player) => score + player.score, 0);
   }
+
+  get currentPlayer(): Player {
+    return this.players[this.currentPlayerIndex];
+  }
 }
 
 export { Game };

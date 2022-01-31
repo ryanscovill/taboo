@@ -42,3 +42,11 @@ body {
 .grid-col-4 {
   grid-column: 4;
 }
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
