@@ -61,17 +61,6 @@ export class GameComponent implements OnInit {
       // console.log(data);
       this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
       let newGameUpdate = new Game(data);
-      if (this.game) {
-        if (newGameUpdate.turnScore > this.game.turnScore) {
-          this.messageList = [];
-          this.snackBar.open('Correct', '', {
-            duration: 500
-          })
-        }
-        if (newGameUpdate.word?.word !== this.game?.word?.word) {
-          this.messageList = [];
-        }
-      }
       this.game = newGameUpdate;
       if (data.currentPlayerIndex !== undefined) {
         this.currentPlayer = data.players[data.currentPlayerIndex];
