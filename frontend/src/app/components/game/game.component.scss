@@ -87,12 +87,14 @@
 
 .center {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
 .title {
+  height: 3em;
   grid-column: 2;
   color: #fff;
   margin-bottom: 5px;
@@ -162,3 +164,34 @@
   right: 0;
   bottom: 0;
 }
+
+.play-area {
+  width: 500px;
+  height: 400px;
+}
+
+.overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+
+  &.skipped {
+    background: grey;
+  }
+
+  &.correct {
+    background: green;
+  }
+
+  &.wrong {
+    background: red;
+  }
+}
+
+.overlay-title {
+  font-size: 4em;
+  font-weight: bold;
+  color: #0f0f0f;
+}
+

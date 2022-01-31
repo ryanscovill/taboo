@@ -1,5 +1,5 @@
 <div class="players-container">
-  <span class="team-title" [ngClass]="{'current-team': currentPlayer.team === team}">Team {{team}}</span>
+  <span class="team-title" [ngClass]="{'current-team': currentPlayer?.team === team}">Team {{team}}</span>
   <div class="team-score">{{teamScore}}</div>
   <div class="players-list">
     <div class="player-item" *ngFor="let p of players" [ngClass]="{'current-player': currentPlayer.id === p.id}">

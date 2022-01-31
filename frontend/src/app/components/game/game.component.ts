@@ -21,6 +21,7 @@ export class GameComponent implements OnInit {
   currentPlayer: Player;
   messageList: string[] = [];
   newMessage: string;
+  cardAction: string;
 
   constructor(
     public playerService: PlayerService,
@@ -43,7 +44,7 @@ export class GameComponent implements OnInit {
       }
     });
     this.socketIoService.receiveNotification().subscribe((action: string) => {
-      console.log(action);
+      this.showCardAction(action);
     });
   }
 
@@ -57,7 +58,7 @@ export class GameComponent implements OnInit {
 
   receiveGameUpdate() {
     this.socketIoService.receiveGameUpdate().subscribe((data: Game) => {
-      console.log(data);
+      // console.log(data);
       this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
       let newGameUpdate = new Game(data);
       if (this.game) {
@@ -107,6 +108,23 @@ export class GameComponent implements OnInit {
     this.socketIoService.badWord(this.gameId);
   }
 
+  showCardAction(action: string) {
+    this.cardAction = action;
+    let timeout = 2000;
+    switch(action) {
+      case 'wrong':
+        timeout = 3000;
+        break;
+      case 'correct':
+        timeout = 1000;
+        break;
+    }
+    console.log(this.cardAction);
+    setTimeout(() => {
+      this.cardAction = null;
+    }, timeout);
+  }
+
   sendMessage() {
     if (this.newMessage) {
       this.socketIoService.sendMessage(this.gameId, this.playerService.player.team, this.newMessage);
@@ -138,7 +156,7 @@ export class GameComponent implements OnInit {
         return 'Listen';
       }
     }
-    return '';
+    return ' ';
   }
 
 }

@@ -1,12 +1,21 @@
 <div class="game-container">
+  <ng-container *ngIf="game?.state !== 'waiting'">
   <div class="players-card card grid-col-1 grid-row-2">
    <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
   </div>
   <div class="players-card card grid-col-3 grid-row-2">
     <game-players [players]="game?.team2" [currentPlayer]="currentPlayer" [team]="2" [teamScore]="game?.team2Score"></game-players>
    </div>
+  </ng-container>
   <div class="title center"><h1>{{title}}</h1></div>
-  <div class="card-container card">
+  <div class="card-container card play-area">
+    <div *ngIf="cardAction" class="overlay center" [ngClass]="cardAction">
+      <div class="overlay-title" [ngSwitch]="cardAction">
+        <span *ngSwitchCase="'skipped'">Skipped</span>
+        <span *ngSwitchCase="'correct'">Correct</span>
+        <span *ngSwitchCase="'wrong'">Taboo</span>
+      </div>
+    </div>
     <div class="start-container" *ngIf="game?.state === 'waiting'">
       <div class="team-container">
         <div class="team-title"><h2>Team 1</h2></div>
@@ -62,10 +71,12 @@
     </div>
 
     <div class="between-turns" *ngIf="game?.state === 'between_round'">
-      <div><h3>Turn Points: {{game?.turnScore}}</h3></div>
-      <div *ngIf="myTurn">
-        <p>You're turn next!</p>
-        <button mat-raised-button (click)="startMyTurn()">Let's Go</button>
+      <div class="center">
+        <div><h3>Turn Points: {{game?.turnScore}}</h3></div>
+        <div *ngIf="myTurn">
+          <h1>You're turn next</h1>
+          <button mat-raised-button (click)="startMyTurn()">Let's Go</button>
+        </div>
       </div>
     </div>
   </div>

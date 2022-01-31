@@ -109,14 +109,14 @@ io.on("connection", (socket) => {
     socket.on('skipWord', (data) => {
         const gameId = data.gameId;
         setWord(gameId);
-        io.to(gameId).emit('notification', 'skipped_word');
+        io.to(gameId).emit('notification', 'skipped');
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
     socket.on('badWord', (data) => {
         const gameId = data.gameId;
         setWord(gameId);
-        io.to(gameId).emit('notification', 'bad_word');
+        io.to(gameId).emit('notification', 'wrong');
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
@@ -126,6 +126,7 @@ io.on("connection", (socket) => {
         if (data.message === games[gameId].word.word) {
             games[gameId].turnScore += 1;
             games[gameId].players[games[gameId].currentPlayerIndex].score += 1;
+            io.to(gameId).emit('notification', 'correct');
             setWord(gameId);
             io.to(gameId).emit('gameUpdate', games[gameId]);
         }
@@ -143,18 +144,6 @@ io.on("connection", (socket) => {
             io.to(socket.gameId).emit('gameUpdate', games[socket.gameId]);
         }
     });
-    
-    // socket.emit('message', 'Hey I just connected');
-
-    // socket.broadcast.emit('message', 'This message is sent to everyone but the sender');
-
-    // io.emit('This message is sent to everyone');
-
-    // socket.join('room1');
-
-    // socket.to('room1').emit('message', 'This message is sent to everyone in room1 except the sender'); 
-    
-    // io.to("room1").emit('message', 'This message is sent to everyone in room1');
 });
 
 const PORT = process.env.PORT || 3000;
