@@ -17,14 +17,15 @@ export class StartComponent implements OnInit {
 
   ngOnInit(): void {
     this.startForm = new FormGroup({
-      name: new FormControl('', [Validators.required])
+      name: new FormControl('', [Validators.required]),
+      turnTime: new FormControl(30, [Validators.required]),
     });
   }
 
   createGame() {
     const gameId = uuidv4();
     this.playerService.createPlayer(this.startForm.get('name').value);
-    this.socketioService.createGame(gameId, this.playerService.player);
+    this.socketioService.createGame(gameId, this.startForm.get('turnTime').value, this.playerService.player);
     this.router.navigate(['/game', gameId])
   }
 }

@@ -10,7 +10,6 @@ const io = require('socket.io')(httpServer, {
 const games = [];
 const timers = {};
 const wordHelper = new WordHelper();
-const TIME_PER_TURN = 1000;
 
 const getNextPlayer = (gameId) => {
     let i = games[gameId].currentPlayerIndex;
@@ -29,7 +28,7 @@ const setWord = (gameId) => {
 const startTurn = (gameId) => {
     games[gameId].state = 'playing';
     games[gameId].turnScore = 0;
-    games[gameId].timer = TIME_PER_TURN;
+    games[gameId].timer = games[gameId].turnTime;
     setWord(gameId);
     timers[gameId] = setInterval(() => gameTick(gameId), 1000);
     return games[gameId];
@@ -61,7 +60,7 @@ io.on("connection", (socket) => {
     socket.on('createGame', (data) => {
         const gameId = data.gameId;
         socket.join(gameId);
-        games[gameId] = { players: [data.player], state: "waiting" };
+        games[gameId] = { players: [data.player], turnTime: data.turnTime, state: "waiting" };
         joinTeam(gameId, data.player.id, 1);
         socket.playerId = data.player.id;
         socket.gameId = gameId;
@@ -122,7 +121,7 @@ io.on("connection", (socket) => {
 
     socket.on('message', (data) => {
         const gameId = socket.gameId;
-        io.to(gameId).emit('message', data.message);
+        io.to(gameId).emit('message', data);
         if (data.message === games[gameId].word.word) {
             games[gameId].turnScore += 1;
             games[gameId].players[games[gameId].currentPlayerIndex].score += 1;

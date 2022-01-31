@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
+import { Message } from '../models/message.model';
 import { Player } from '../models/player.model';
 
 @Injectable({
@@ -10,14 +11,14 @@ import { Player } from '../models/player.model';
 export class SocketioService {
 
   socket!: Socket;
-  private message$ = new ReplaySubject<string>(1);
+  private message$ = new ReplaySubject<Message>(1);
 
   constructor() {
     this.socket = io(environment.SOCKET_ENDPOINT);
    }
 
-  createGame(gameId, player: Player) {
-    this.socket.emit('createGame', { gameId: gameId, player: player });
+  createGame(gameId, turnTime: number, player: Player) {
+    this.socket.emit('createGame', { gameId: gameId, turnTime: turnTime, player: player });
   }
 
   joinGame(gameId, player: Player) {
@@ -72,8 +73,8 @@ export class SocketioService {
     this.socket.emit('badWord', { gameId: gameId });
   };
 
-  sendMessage(gameId: string, team: number, message: string) {
-    this.socket.emit('message', { gameId: gameId, team: team, message: message });
+  sendMessage(gameId: string, team: number, playerName: string, message: string) {
+    this.socket.emit('message', { gameId: gameId, team: team, playerName: playerName, message: message });
   }
 
   getMessage() {
