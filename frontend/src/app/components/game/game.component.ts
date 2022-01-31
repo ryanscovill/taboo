@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Game } from 'src/app/models/game.model';
@@ -6,6 +7,7 @@ import { Message } from 'src/app/models/message.model';
 import { Player } from 'src/app/models/player.model';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { SocketioService } from 'src/app/services/socketio.service';
+import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 
 @Component({
   selector: 'app-game',
@@ -28,14 +30,17 @@ export class GameComponent implements OnInit {
     public playerService: PlayerService,
     private socketIoService: SocketioService,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
     this.gameId = this.route.snapshot.paramMap.get('id');
+
     if (!this.playerService.player) {
-      this.socketIoService.joinGame(this.gameId, this.playerService.createPlayer('player' + Math.floor(Math.random() * 100)));
+      this.openJoinDialog();
     }
+
     this.receiveJoinedPlayers();
     this.receiveGameUpdate();
     this.socketIoService.getMessage().subscribe((message: Message) => {
@@ -48,6 +53,17 @@ export class GameComponent implements OnInit {
       this.showCardAction(action);
     });
   }
+
+  openJoinDialog() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    const dialogRef = this.dialog.open(JoinDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(
+        data => this.socketIoService.joinGame(this.gameId, this.playerService.createPlayer(data.name))
+    );
+}
 
   receiveJoinedPlayers() {
     this.socketIoService.receiveJoinedPlayers().subscribe((data: string) => {

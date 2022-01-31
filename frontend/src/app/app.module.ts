@@ -10,13 +10,15 @@ import { GameComponent } from './components/game/game.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { PlayersComponent } from './components/game/players/players.component';
+import { JoinDialogComponent } from './components/join-dialog/join-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StartComponent,
     GameComponent,
-    PlayersComponent
+    PlayersComponent,
+    JoinDialogComponent
   ],
   imports: [
     BrowserModule,

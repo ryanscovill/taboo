@@ -1,4 +1,4 @@
-<div class="game-container">
+<div class="game-container" *ngIf="game">
   <ng-container *ngIf="game?.state !== 'waiting'">
   <div class="players-card card grid-col-1 grid-row-2">
    <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
