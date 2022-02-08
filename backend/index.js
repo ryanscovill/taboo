@@ -77,7 +77,9 @@ io.on("connection", (socket) => {
         } else {
             data.player.team = 1;
         }
-        games[gameId].players.push(data.player);
+        if (games[gameId].players.filter(player => player.id === data.player.id).length === 0) {
+            games[gameId].players.push(data.player);
+        }
         socket.playerId = data.player.id;
         socket.gameId = gameId;
         socket.to(gameId).emit('joinedGame', "A player joined the game!");
@@ -121,13 +123,16 @@ io.on("connection", (socket) => {
 
     socket.on('message', (data) => {
         const gameId = socket.gameId;
-        io.to(gameId).emit('message', data);
         if (data.message === games[gameId].word.word) {
+            data.turnWord = true;
+            io.to(gameId).emit('message', data);
             games[gameId].turnScore += 1;
             games[gameId].players[games[gameId].currentPlayerIndex].score += 1;
             io.to(gameId).emit('notification', 'correct');
             setWord(gameId);
             io.to(gameId).emit('gameUpdate', games[gameId]);
+        } else {
+            io.to(gameId).emit('message', data);
         }
     });
 
@@ -139,7 +144,7 @@ io.on("connection", (socket) => {
 
     socket.on('disconnect', () => {
         if (socket.gameId) {
-            games[socket.gameId].players = games[socket.gameId].players.filter(player => player.id !== socket.playerId);
+            // games[socket.gameId].players = games[socket.gameId].players.filter(player => player.id !== socket.playerId);
             io.to(socket.gameId).emit('gameUpdate', games[socket.gameId]);
         }
     });

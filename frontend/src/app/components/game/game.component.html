@@ -50,7 +50,7 @@
           </div>
           <div *ngIf="myTeam" class="message-container">
             <div class="messages" #messageListElement>
-              <p *ngFor="let m of messageList"><strong>{{m.playerName}}</strong> : {{m.message}}</p>
+              <p *ngFor="let m of messageList" [ngClass]="{ 'turn-word': m.turnWord }"><strong>{{m.playerName}}</strong> : {{m.message}}</p>
             </div>
           </div>
         </div>

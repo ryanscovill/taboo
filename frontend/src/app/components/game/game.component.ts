@@ -36,9 +36,12 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameId = this.route.snapshot.paramMap.get('id');
+    this.playerService.getPlayerFromStorage();
 
     if (!this.playerService.player) {
       this.openJoinDialog();
+    } else {
+      this.socketIoService.joinGame(this.gameId, this.playerService.player);
     }
 
     this.receiveJoinedPlayers();
@@ -75,7 +78,7 @@ export class GameComponent implements OnInit {
 
   receiveGameUpdate() {
     this.socketIoService.receiveGameUpdate().subscribe((data: Game) => {
-      // console.log(data);
+      console.log(data);
       this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
       let newGameUpdate = new Game(data);
       this.game = newGameUpdate;
