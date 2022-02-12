@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { PlayersComponent } from './components/game/players/players.component';
 import { JoinDialogComponent } from './components/join-dialog/join-dialog.component';
+import { ChatboxComponent } from './components/game/chatbox/chatbox.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { JoinDialogComponent } from './components/join-dialog/join-dialog.compon
     StartComponent,
     GameComponent,
     PlayersComponent,
-    JoinDialogComponent
+    JoinDialogComponent,
+    ChatboxComponent
   ],
   imports: [
     BrowserModule,

@@ -1,15 +1,17 @@
-class Message {
+class GameAction {
   gameId: string;
   team: number;
-  playerName: string;
   message: string;
+  action: string;
+  word: string;
+  playerName: string;
 
   constructor(message: any) {
       this.gameId = message.gameId;
-      this.team = message.team;
+      this.action = message.action;
       this.playerName = message.playerName;
-      this.message = message.message;
+      this.word = message.word;
   }
 }
 
-export { Message };
+export { GameAction };

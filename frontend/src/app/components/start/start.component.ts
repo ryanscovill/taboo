@@ -18,7 +18,7 @@ export class StartComponent implements OnInit {
   ngOnInit(): void {
     this.startForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      turnTime: new FormControl(30, [Validators.required]),
+      turnTime: new FormControl(120, [Validators.required]),
     });
   }
 

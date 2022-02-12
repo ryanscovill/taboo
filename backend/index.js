@@ -50,6 +50,7 @@ const gameTick = (gameId) => {
 
 const joinTeam = (gameId, playerId, team) => {
     games[gameId].players.find(player => player.id === playerId).team = team;
+    games[gameId].players.find(player => player.id === playerId).active = true;
     games[gameId].players.find(player => player.id === playerId).score = 0;
 };
 
@@ -69,6 +70,10 @@ io.on("connection", (socket) => {
 
     socket.on('joinGame', (data) => {
         const gameId = data.gameId;
+        if (!games[gameId]) {
+            socket.emit('error', 'Error: Game does not exist');
+            return;
+        }
         socket.join(gameId);
         let team1Count = games[gameId].players.filter(player => player.team === 1).length;
         let team2Count = games[gameId].players.filter(player => player.team === 2).length;
@@ -109,26 +114,26 @@ io.on("connection", (socket) => {
 
     socket.on('skipWord', (data) => {
         const gameId = data.gameId;
+        io.to(gameId).emit('notification', { action: 'skipped', playerName: games[gameId].players[games[gameId].currentPlayerIndex].name, message: `skipped ${games[gameId].word.word}` });
         setWord(gameId);
-        io.to(gameId).emit('notification', 'skipped');
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
     socket.on('badWord', (data) => {
         const gameId = data.gameId;
+        io.to(gameId).emit('notification', { action: 'wrong', playerName: games[gameId].players[games[gameId].currentPlayerIndex].name, message: `said a taboo word ${games[gameId].word.word}`});
         setWord(gameId);
-        io.to(gameId).emit('notification', 'wrong');
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
     socket.on('message', (data) => {
         const gameId = socket.gameId;
-        if (data.message === games[gameId].word.word) {
+        if (data.message.toString().trim().toLowerCase() === games[gameId].word.word.toLowerCase()) {
             data.turnWord = true;
             io.to(gameId).emit('message', data);
             games[gameId].turnScore += 1;
             games[gameId].players[games[gameId].currentPlayerIndex].score += 1;
-            io.to(gameId).emit('notification', 'correct');
+            io.to(gameId).emit('notification', { action: 'correct', playerName: 'TODO HERE', message: `correctly guessed ${games[gameId].word.word}` });
             setWord(gameId);
             io.to(gameId).emit('gameUpdate', games[gameId]);
         } else {
@@ -144,7 +149,8 @@ io.on("connection", (socket) => {
 
     socket.on('disconnect', () => {
         if (socket.gameId) {
-            // games[socket.gameId].players = games[socket.gameId].players.filter(player => player.id !== socket.playerId);
+            let playerIndex = games[socket.gameId].players.map(player => player.id).indexOf(socket.playerId);
+            games[socket.gameId].players[playerIndex].active = false;
             io.to(socket.gameId).emit('gameUpdate', games[socket.gameId]);
         }
     });

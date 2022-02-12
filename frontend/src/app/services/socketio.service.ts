@@ -53,6 +53,14 @@ export class SocketioService {
     });
   }
 
+  receiveServerErrors() {
+    return new Observable((observer) => {
+      this.socket.on('error', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
   startGame(gameId: string) {
     this.socket.emit('startGame', { gameId: gameId });
   }

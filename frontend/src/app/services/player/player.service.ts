@@ -18,8 +18,8 @@ export class PlayerService {
     return this.player;
   }
 
-  updatePlayer(player: { team: number }) {
-    this.player.team = player.team;
+  updatePlayer(player: Player) {
+    this.player = new Player(player);
     localStorage.setItem('player', JSON.stringify(this.player));
   }
 

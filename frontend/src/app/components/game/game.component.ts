@@ -1,13 +1,15 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { GameAction } from 'src/app/models/game-action.model';
 import { Game } from 'src/app/models/game.model';
 import { Message } from 'src/app/models/message.model';
 import { Player } from 'src/app/models/player.model';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
+import { ChatboxComponent } from './chatbox/chatbox.component';
 
 @Component({
   selector: 'app-game',
@@ -15,7 +17,7 @@ import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  @ViewChild('messageListElement') private scrollContainer: ElementRef;
+  @ViewChildren('messageBox') messageBoxes: QueryList<ChatboxComponent>;
 
   gameId: string;
   game: Game;
@@ -23,6 +25,7 @@ export class GameComponent implements OnInit {
   myTeam: boolean;
   currentPlayer: Player;
   messageList: Message[] = [];
+  gameLog: GameAction[] = [];
   newMessage: string;
   cardAction: string;
 
@@ -48,12 +51,21 @@ export class GameComponent implements OnInit {
     this.receiveGameUpdate();
     this.socketIoService.getMessage().subscribe((message: Message) => {
       this.messageList.push(message);
-      if (this.scrollContainer) {
-        setTimeout(() => this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight);
-      }
+      this.messageBoxes.forEach(messageBox => {
+        messageBox.scrollToBottom();
+      });
     });
-    this.socketIoService.receiveNotification().subscribe((action: string) => {
-      this.showCardAction(action);
+    this.socketIoService.receiveNotification().subscribe((action: GameAction) => {
+      this.showCardAction(action.action);
+      this.gameLog.push(action);
+      this.messageList = [];
+    });
+
+    this.socketIoService.receiveServerErrors().subscribe((error: string) => {
+      this.snackBar.open(error, '', {
+        duration: 5000,
+        panelClass: ['red-snackbar']
+      });
     });
   }
 
@@ -78,7 +90,6 @@ export class GameComponent implements OnInit {
 
   receiveGameUpdate() {
     this.socketIoService.receiveGameUpdate().subscribe((data: Game) => {
-      console.log(data);
       this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
       let newGameUpdate = new Game(data);
       this.game = newGameUpdate;

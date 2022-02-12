@@ -1,11 +1,14 @@
+<div class="player">
+  <span>{{ playerService.player?.name }}</span>
+</div>
 <div class="game-container" *ngIf="game">
   <ng-container *ngIf="game?.state !== 'waiting'">
-  <div class="players-card card grid-col-1 grid-row-2">
-   <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
-  </div>
-  <div class="players-card card grid-col-3 grid-row-2">
-    <game-players [players]="game?.team2" [currentPlayer]="currentPlayer" [team]="2" [teamScore]="game?.team2Score"></game-players>
-   </div>
+    <div class="players-card card grid-col-1 grid-row-2">
+    <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
+    </div>
+    <div class="players-card card grid-col-3 grid-row-2">
+      <game-players [players]="game?.team2" [currentPlayer]="currentPlayer" [team]="2" [teamScore]="game?.team2Score"></game-players>
+    </div>
   </ng-container>
   <div class="title center"><h1>{{title}}</h1></div>
   <div class="card-container card play-area">
@@ -48,20 +51,15 @@
             </div>
             <button mat-raised-button (click)="skipWord()">Skip</button>
           </div>
-          <div *ngIf="myTeam" class="message-container">
-            <div class="messages" #messageListElement>
-              <p *ngFor="let m of messageList" [ngClass]="{ 'turn-word': m.turnWord }"><strong>{{m.playerName}}</strong> : {{m.message}}</p>
-            </div>
+          <div *ngIf="myTeam">
+            <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
           </div>
         </div>
       </div>
 
       <div *ngIf="!myTurn && myTeam">
-        <div *ngIf="myTeam" class="message-container">
-          <div class="messages" #messageListElement>
-            <p *ngFor="let m of messageList"><strong>{{m.playerName}}</strong> : {{m.message}}</p>
-          </div>
-
+        <div *ngIf="myTeam">
+          <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
           <div class="message-input">
             <input autofocus [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
           </div>
@@ -86,6 +84,11 @@
   <div class="start" *ngIf="game?.state === 'waiting'">
     <button mat-raised-button (click)="startGame()">Start Game</button>
   </div>
+</div>
+
+<div *ngIf="game && game?.state !== 'waiting'" class="game-updates">
+  <h3>Game Log</h3>
+  <app-chatbox #messageBox [messageList]="gameLog" [height]="'90%'"></app-chatbox>
 </div>
 
 <div class="skip-turn" *ngIf="game?.state === 'playing'">
