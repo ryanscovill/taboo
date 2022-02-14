@@ -54,6 +54,13 @@ const joinTeam = (gameId, playerId, team) => {
     games[gameId].players.find(player => player.id === playerId).score = 0;
 };
 
+const getPlayer = (gameId, playerId) => {
+    return games[gameId].players.find(player => player.id === playerId);
+};
+
+const getCurrentPlayer = (gameId) => {
+    return games[gameId].players[games[gameId].currentPlayerIndex];
+};
 
 io.on("connection", (socket) => {
     console.log(" a user connected");
@@ -114,14 +121,14 @@ io.on("connection", (socket) => {
 
     socket.on('skipWord', (data) => {
         const gameId = data.gameId;
-        io.to(gameId).emit('notification', { action: 'skipped', playerName: games[gameId].players[games[gameId].currentPlayerIndex].name, message: `skipped ${games[gameId].word.word}` });
+        io.to(gameId).emit('notification', { action: 'skipped', playerName: getCurrentPlayer(gameId).name, message: `skipped ${games[gameId].word.word}` });
         setWord(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
     socket.on('badWord', (data) => {
         const gameId = data.gameId;
-        io.to(gameId).emit('notification', { action: 'wrong', playerName: games[gameId].players[games[gameId].currentPlayerIndex].name, message: `said a taboo word ${games[gameId].word.word}`});
+        io.to(gameId).emit('notification', { action: 'wrong', playerName: getPlayer(gameId, data.playerId).name, message: `caught ${getCurrentPlayer(gameId).name} saying ${games[gameId].word.word}`});
         setWord(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
@@ -133,7 +140,7 @@ io.on("connection", (socket) => {
             io.to(gameId).emit('message', data);
             games[gameId].turnScore += 1;
             games[gameId].players[games[gameId].currentPlayerIndex].score += 1;
-            io.to(gameId).emit('notification', { action: 'correct', playerName: 'TODO HERE', message: `correctly guessed ${games[gameId].word.word}` });
+            io.to(gameId).emit('notification', { action: 'correct', playerName: getPlayer(gameId, data.playerId).name, message: `correctly guessed ${games[gameId].word.word}` });
             setWord(gameId);
             io.to(gameId).emit('gameUpdate', games[gameId]);
         } else {

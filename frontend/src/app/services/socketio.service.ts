@@ -77,12 +77,12 @@ export class SocketioService {
     this.socket.emit('skipWord', { gameId: gameId });
   }
 
-  badWord(gameId: string) {
-    this.socket.emit('badWord', { gameId: gameId });
+  badWord(gameId: string, playerId: string) {
+    this.socket.emit('badWord', { gameId: gameId, playerId: playerId });
   };
 
-  sendMessage(gameId: string, team: number, playerName: string, message: string) {
-    this.socket.emit('message', { gameId: gameId, team: team, playerName: playerName, message: message });
+  sendMessage(gameId: string, team: number, playerName: string, playerId: string, message: string) {
+    this.socket.emit('message', { gameId: gameId, team: team, playerName: playerName, playerId: playerId, message: message });
   }
 
   getMessage() {

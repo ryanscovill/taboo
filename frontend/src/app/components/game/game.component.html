@@ -88,7 +88,7 @@
 
 <div *ngIf="game && game?.state !== 'waiting'" class="game-updates">
   <h3>Game Log</h3>
-  <app-chatbox #messageBox [messageList]="gameLog" [height]="'90%'"></app-chatbox>
+  <app-chatbox #messageBox [messageList]="gameLog" [height]="'600px'"></app-chatbox>
 </div>
 
 <div class="skip-turn" *ngIf="game?.state === 'playing'">

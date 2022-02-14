@@ -59,6 +59,9 @@ export class GameComponent implements OnInit {
       this.showCardAction(action.action);
       this.gameLog.push(action);
       this.messageList = [];
+      this.messageBoxes.forEach(messageBox => {
+        messageBox.scrollToBottom();
+      });
     });
 
     this.socketIoService.receiveServerErrors().subscribe((error: string) => {
@@ -125,7 +128,7 @@ export class GameComponent implements OnInit {
   }
 
   badWord() {
-    this.socketIoService.badWord(this.gameId);
+    this.socketIoService.badWord(this.gameId, this.playerService.player.id);
   }
 
   showCardAction(action: string) {
@@ -146,7 +149,7 @@ export class GameComponent implements OnInit {
 
   sendMessage() {
     if (this.newMessage) {
-      this.socketIoService.sendMessage(this.gameId, this.playerService.player.team, this.playerService.player.name, this.newMessage);
+      this.socketIoService.sendMessage(this.gameId, this.playerService.player.team, this.playerService.player.name, this.playerService.player.id, this.newMessage);
       this.newMessage = '';
     }
   }
