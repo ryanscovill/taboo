@@ -16,11 +16,16 @@ export class StartComponent implements OnInit {
   constructor(private router: Router, private playerService: PlayerService, private socketioService: SocketioService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.clearLocalStorage();
     this.startForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       turnTime: new FormControl(120, [Validators.required]),
     });
   }
+
+  clearLocalStorage() {
+    localStorage.removeItem('player');
+  };
 
   createGame() {
     const gameId = uuidv4();

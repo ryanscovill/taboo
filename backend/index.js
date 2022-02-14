@@ -156,8 +156,7 @@ io.on("connection", (socket) => {
 
     socket.on('disconnect', () => {
         if (socket.gameId) {
-            let playerIndex = games[socket.gameId].players.map(player => player.id).indexOf(socket.playerId);
-            games[socket.gameId].players[playerIndex].active = false;
+            games[socket.gameId].players = games[socket.gameId].players.filter(player => player.id !== socket.playerId);
             io.to(socket.gameId).emit('gameUpdate', games[socket.gameId]);
         }
     });
