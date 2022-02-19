@@ -8,6 +8,9 @@ class Game {
   turnScore: number;
   timer: number;
   word: { word: string, hints: string[] };
+  turnTime: number;
+  rounds: number;
+  round: number;
 
   constructor(game: any) {
       this.id = game.id;
@@ -17,6 +20,9 @@ class Game {
       this.turnScore = game.turnScore;
       this.word = game.word;
       this.timer = game.timer;
+      this.turnTime = game.turnTime;
+      this.rounds = game.rounds;
+      this.round = game.round;
   }
 
   get team1(): Player[] {

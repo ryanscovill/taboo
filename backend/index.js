@@ -16,6 +16,11 @@ const getNextPlayer = (gameId) => {
     i++;
     if (i === games[gameId].players.length) {
         i = 0;
+        games[gameId].round ++;
+        if (games[gameId].round > games[gameId].rounds) {
+            games[gameId].round = games[gameId].rounds;
+            endGame(gameId);
+        }
     }
     return i;
 }
@@ -36,8 +41,13 @@ const startTurn = (gameId) => {
 
 const turnEnded = (gameId) => {
     clearInterval(timers[gameId]);
-    games[gameId].currentPlayerIndex = getNextPlayer(gameId);
     games[gameId].state = 'between_round';
+    games[gameId].currentPlayerIndex = getNextPlayer(gameId);
+}
+
+const endGame = (gameId) => {
+    games[gameId].state = 'finished';
+    io.to(gameId).emit('gameUpdate', games[gameId]);
 }
 
 const gameTick = (gameId) => {
@@ -68,7 +78,7 @@ io.on("connection", (socket) => {
     socket.on('createGame', (data) => {
         const gameId = data.gameId;
         socket.join(gameId);
-        games[gameId] = { players: [data.player], turnTime: data.turnTime, state: "waiting" };
+        games[gameId] = { players: [data.player], turnTime: data.turnTime, rounds: data.rounds, state: "waiting" };
         joinTeam(gameId, data.player.id, 1);
         socket.playerId = data.player.id;
         socket.gameId = gameId;
@@ -108,6 +118,7 @@ io.on("connection", (socket) => {
         games[gameId].players.forEach(player => {
             player.score = 0;
         });
+        games[gameId].round = 1;
         games[gameId].currentPlayerIndex = 0;
         games[gameId] = startTurn(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);

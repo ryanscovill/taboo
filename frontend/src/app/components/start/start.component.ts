@@ -20,6 +20,7 @@ export class StartComponent implements OnInit {
     this.startForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       turnTime: new FormControl(120, [Validators.required]),
+      rounds: new FormControl(3, [Validators.required])
     });
   }
 
@@ -30,7 +31,7 @@ export class StartComponent implements OnInit {
   createGame() {
     const gameId = uuidv4();
     this.playerService.createPlayer(this.startForm.get('name').value);
-    this.socketioService.createGame(gameId, this.startForm.get('turnTime').value, this.playerService.player);
+    this.socketioService.createGame(gameId, this.startForm.get('turnTime').value, this.startForm.get('rounds').value, this.playerService.player);
     this.router.navigate(['/game', gameId])
   }
 }

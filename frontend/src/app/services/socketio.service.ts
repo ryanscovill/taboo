@@ -17,8 +17,8 @@ export class SocketioService {
     this.socket = io(environment.SOCKET_ENDPOINT);
    }
 
-  createGame(gameId, turnTime: number, player: Player) {
-    this.socket.emit('createGame', { gameId: gameId, turnTime: turnTime, player: player });
+  createGame(gameId, turnTime: number, rounds: number, player: Player) {
+    this.socket.emit('createGame', { gameId: gameId, turnTime: turnTime, rounds: rounds, player: player });
   }
 
   joinGame(gameId, player: Player) {
