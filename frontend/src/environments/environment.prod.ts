@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
-};
+  production: true,
+  SOCKET_ENDPOINT: location.origin.replace(/^http/, 'ws')
+}
