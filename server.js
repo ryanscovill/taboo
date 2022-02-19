@@ -1,12 +1,31 @@
-const app = require('express');
+const express = require('express');
 const { clearInterval } = require('timers');
 const { WordHelper } = require('./util/words.js');
-const httpServer = require('http').createServer(app);
-const io = require('socket.io')(httpServer, {
-    cors: true,
-    origins: ["*"]
+
+
+// angular app
+var app = express();
+
+const PORT = process.env.PORT || 8080;
+
+var server = app.listen(PORT, function () {
+  var port = server.address().port;
+  console.log("App now running on port", port);
 });
 
+const distDir = __dirname + "/dist/";
+app.use(express.static(distDir));
+
+app.get('/*', (req, res) => {
+  res.sendFile(distDir + '/index.html');
+})
+
+const io = require('socket.io')(server, {
+  cors: true,
+  origins: ["*"]
+});
+
+// socket.io
 const games = [];
 const timers = {};
 const wordHelper = new WordHelper();
@@ -172,7 +191,3 @@ io.on("connection", (socket) => {
         }
     });
 });
-
-const PORT = process.env.PORT || 3000;
-
-httpServer.listen(PORT, () => console.log('Server started on port ' + PORT));
