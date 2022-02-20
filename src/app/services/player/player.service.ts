@@ -10,11 +10,12 @@ export class PlayerService {
 
   constructor() { }
 
-  createPlayer(name: string) {
+  createPlayer(name: string, gameId: string) {
     if (!this.player) {
       this.player = new Player({id: uuidv4(), name: name});
       localStorage.setItem('player', JSON.stringify(this.player));
     }
+    localStorage.setItem('gameId', gameId);
     return this.player;
   }
 
@@ -23,7 +24,12 @@ export class PlayerService {
     localStorage.setItem('player', JSON.stringify(this.player));
   }
 
-  getPlayerFromStorage(): void {
-    this.player = localStorage.getItem('player') ? JSON.parse(localStorage.getItem('player')) : null;
+  getPlayerFromStorage(gameId: string): void {
+    let localGameId = localStorage.getItem('gameId');
+    if (localGameId === gameId) {
+      this.player = localStorage.getItem('player') ? JSON.parse(localStorage.getItem('player')) : null;
+    } else {
+      this.player = null;
+    }
   }
 }

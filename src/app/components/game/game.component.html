@@ -47,6 +47,7 @@
       <div class="timer">{{formatSeconds(game?.timer)}}</div>
       <div *ngIf="!myTeam">
         <div class="game-card">
+          <div class="hint">{{ game.word?.word }}</div>
           <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
         </div>
         <div class="center btn-row"><button mat-raised-button (click)="badWord()">Said it!</button></div>

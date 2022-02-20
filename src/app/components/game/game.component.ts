@@ -39,7 +39,7 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameId = this.route.snapshot.paramMap.get('id');
-    this.playerService.getPlayerFromStorage();
+    this.playerService.getPlayerFromStorage(this.gameId);
 
     if (!this.playerService.player) {
       this.openJoinDialog();
@@ -79,7 +79,7 @@ export class GameComponent implements OnInit {
     dialogConfig.autoFocus = true;
     const dialogRef = this.dialog.open(JoinDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
-        data => this.socketIoService.joinGame(this.gameId, this.playerService.createPlayer(data.name))
+        data => this.socketIoService.joinGame(this.gameId, this.playerService.createPlayer(data.name, this.gameId))
     );
 }
 
@@ -93,9 +93,9 @@ export class GameComponent implements OnInit {
 
   receiveGameUpdate() {
     this.socketIoService.receiveGameUpdate().subscribe((data: Game) => {
-      this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
       let newGameUpdate = new Game(data);
       this.game = newGameUpdate;
+      this.playerService.updatePlayer(data.players.filter(p => p.id === this.playerService.player.id)[0]);
       if (data.currentPlayerIndex !== undefined) {
         this.currentPlayer = data.players[data.currentPlayerIndex];
         this.myTurn = this.currentPlayer.id === this.playerService.player.id;

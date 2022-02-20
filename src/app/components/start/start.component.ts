@@ -30,7 +30,7 @@ export class StartComponent implements OnInit {
 
   createGame() {
     const gameId = uuidv4();
-    this.playerService.createPlayer(this.startForm.get('name').value);
+    this.playerService.createPlayer(this.startForm.get('name').value, gameId);
     this.socketioService.createGame(gameId, this.startForm.get('turnTime').value, this.startForm.get('rounds').value, this.playerService.player);
     this.router.navigate(['/game', gameId])
   }
