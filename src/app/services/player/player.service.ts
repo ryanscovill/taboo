@@ -12,7 +12,7 @@ export class PlayerService {
 
   createPlayer(name: string, gameId: string) {
     if (!this.player) {
-      this.player = new Player({id: uuidv4(), name: name});
+      this.player = new Player({id: uuidv4(), name: name, score: 0, ready: false});
       localStorage.setItem('player', JSON.stringify(this.player));
     }
     localStorage.setItem('gameId', gameId);

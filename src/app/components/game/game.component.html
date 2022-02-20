@@ -40,7 +40,7 @@
       <div class="center">
         <h1 *ngIf="game?.team1Score === game?.team2Score">Teams tied!</h1>
         <h1 *ngIf="game?.team1Score !== game?.team2Score">Team {{game?.team1Score > game?.team2Score ? '1' : '2'}} won!</h1>
-        <button mat-raised-button (click)="startGame()">Play Again</button>
+        <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">Play Again</button>
       </div>
     </div>
     <div class="playing-container" *ngIf="game?.state === 'playing'">

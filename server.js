@@ -75,6 +75,9 @@ const turnEnded = (gameId) => {
 
 const endGame = (gameId) => {
     games[gameId].state = 'finished';
+    games[gameId].players.forEach(player => {
+      player.ready = false;
+    });
     io.to(gameId).emit('gameUpdate', games[gameId]);
 }
 
