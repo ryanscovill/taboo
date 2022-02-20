@@ -29,6 +29,10 @@ export class GameComponent implements OnInit {
   newMessage: string;
   cardAction: string;
 
+  correctSound: HTMLAudioElement;
+  wrongSound: HTMLAudioElement;
+  skipSound: HTMLAudioElement;
+
   constructor(
     public playerService: PlayerService,
     private socketIoService: SocketioService,
@@ -70,6 +74,22 @@ export class GameComponent implements OnInit {
         panelClass: ['red-snackbar']
       });
     });
+
+    this.loadSounds();
+  }
+
+  loadSounds() {
+    this.correctSound = new Audio();
+    this.correctSound.src = '../../../assets/sounds/correct.mp3';
+    this.correctSound.load();
+
+    this.wrongSound = new Audio();
+    this.wrongSound.src = '../../../assets/sounds/wrong.mp3';
+    this.wrongSound.load();
+
+    this.skipSound = new Audio();
+    this.skipSound.src = '../../../assets/sounds/skip.mp3';
+    this.skipSound.load();
   }
 
   openJoinDialog() {
@@ -135,10 +155,16 @@ export class GameComponent implements OnInit {
     this.cardAction = action;
     let timeout = 2000;
     switch(action) {
+      case 'skipped':
+        this.skipSound.play();
+        timeout = 2000;
+        break;
       case 'wrong':
+        this.wrongSound.play();
         timeout = 3000;
         break;
       case 'correct':
+        this.correctSound.play();
         timeout = 1000;
         break;
     }
