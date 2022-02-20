@@ -79,9 +79,9 @@
 
     <div class="between-turns" *ngIf="game?.state === 'between_round'">
       <div class="center">
-        <div><h3>Turn Points: {{game?.turnScore}}</h3></div>
+        <div *ngIf="game?.currentPlayerIndex > 0 || game?.round > 1"><h3>Turn Points: {{game?.turnScore}}</h3></div>
         <div *ngIf="myTurn">
-          <h1>You're turn next</h1>
+          <h1>Your turn next</h1>
           <button mat-raised-button (click)="startMyTurn()" color="primary">Let's Go</button>
         </div>
         <div *ngIf="!myTurn">
@@ -92,7 +92,7 @@
   </div>
 
   <div class="start" *ngIf="game?.state === 'waiting'">
-    <button mat-raised-button (click)="startGame()">Start Game</button>
+    <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">I'm Ready</button>
   </div>
 </div>
 

@@ -58,6 +58,15 @@ const startTurn = (gameId) => {
     return games[gameId];
 };
 
+const startGame = (gameId) => {
+  games[gameId].players.forEach(player => {
+    player.score = 0;
+  });
+  games[gameId].round = 1;
+  games[gameId].currentPlayerIndex = 0;
+  games[gameId].state = 'between_round';
+}
+
 const turnEnded = (gameId) => {
     clearInterval(timers[gameId]);
     games[gameId].state = 'between_round';
@@ -80,6 +89,7 @@ const gameTick = (gameId) => {
 const joinTeam = (gameId, playerId, team) => {
     games[gameId].players.find(player => player.id === playerId).team = team;
     games[gameId].players.find(player => player.id === playerId).active = true;
+    games[gameId].players.find(player => player.id === playerId).ready = false;
     games[gameId].players.find(player => player.id === playerId).score = 0;
 };
 
@@ -134,12 +144,14 @@ io.on("connection", (socket) => {
 
     socket.on('startGame', (data) => {
         const gameId = data.gameId;
-        games[gameId].players.forEach(player => {
-            player.score = 0;
-        });
-        games[gameId].round = 1;
-        games[gameId].currentPlayerIndex = 0;
-        games[gameId] = startTurn(gameId);
+        const playerId = data.playerId;
+        games[gameId].players.find(player => player.id === playerId).ready = true;
+
+        let readyCount = games[gameId].players.filter(player => player.ready === true).length;
+        if (readyCount === games[gameId].players.length) {
+            startGame(gameId);
+        }
+
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 

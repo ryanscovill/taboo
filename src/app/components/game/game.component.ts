@@ -112,7 +112,7 @@ export class GameComponent implements OnInit {
   }
 
   startGame() {
-    this.socketIoService.startGame(this.gameId);
+    this.socketIoService.startGame(this.gameId, this.playerService.player.id);
   }
 
   startMyTurn() {
