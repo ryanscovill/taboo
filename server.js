@@ -136,7 +136,7 @@ io.on("connection", (socket) => {
         }
         socket.playerId = data.player.id;
         socket.gameId = gameId;
-        socket.to(gameId).emit('joinedGame', "A player joined the game!");
+        socket.to(gameId).emit('joinedGame', `${data.player.name} joined the game!`);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
