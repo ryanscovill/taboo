@@ -26,12 +26,12 @@
       <div class="team-container">
         <div class="team-title"><h2>Team 1</h2></div>
         <div class="players">
-          <div class="player-item" *ngFor="let player of game.team1">{{player.name}}</div>
+          <div class="player-item" *ngFor="let player of game.team1" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
         </div>
         <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 1" (click)="joinTeam(1)">Join</button></div>
         <div class="team-title"><h2>Team 2</h2></div>
         <div class="players">
-          <div class="player-item" *ngFor="let player of game.team2">{{player.name}}</div>
+          <div class="player-item" *ngFor="let player of game.team2" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
         </div>
         <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 2" (click)="joinTeam(2)">Join</button></div>
       </div>
