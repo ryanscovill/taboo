@@ -36,7 +36,8 @@ $primary-color: #F26970;
   grid-template-columns: 1fr 300px;
   column-gap: 15px;
   align-items: center;
-  height: calc(100vh - 40px - 40px);
+  height: calc(100vh - 40px - 30px);
+  overflow: scroll;
 
   @media (max-width: $medium-width) {
     grid-template-columns: 1fr;

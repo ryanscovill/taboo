@@ -201,7 +201,9 @@ io.on("connection", (socket) => {
 
     socket.on('disconnect', () => {
         if (socket.gameId) {
-            games[socket.gameId].players = games[socket.gameId].players.filter(player => player.id !== socket.playerId);
+            // don't remove a player if they get disconnected
+            // may have to revisit this for a player than cannot reconnect
+            // games[socket.gameId].players = games[socket.gameId].players.filter(player => player.id !== socket.playerId);
             io.to(socket.gameId).emit('gameUpdate', games[socket.gameId]);
         }
     });
