@@ -3,6 +3,10 @@
   flex-direction: column;
   min-width: 200px;
 
+  @media (max-width: 500px) {
+    min-width: 100px;
+  }
+
   .team-title {
     font-size: 17px;
     text-align: center;

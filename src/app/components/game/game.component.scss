@@ -1,3 +1,7 @@
+$large-width: 1350px;
+$medium-width: 875px;
+$small-width: 500px;
+
 .header {
   height: 40px;
   display: grid;
@@ -32,12 +36,26 @@
   column-gap: 15px;
   align-items: center;
   height: calc(100% - 40px);
+
+  @media (max-width: $medium-width) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .game-container {
   display: grid;
   column-gap: 25px;
   justify-content: center;
+  justify-self: center;
+  grid-template-columns: auto 1fr auto;
+
+  @media (max-width: $large-width) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: $small-width) {
+    width: 100%;
+  }
 
   &.waiting {
     grid-column: 1 / span 2;
@@ -49,16 +67,41 @@
   background: rgb(255, 241, 252);
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: $small-width) {
+    padding: 10px;
+  }
 }
 
 .card.players-card {
   padding: 5px;
+
+  &.team-1 {
+    grid-column: 1;
+    grid-row: 2;
+
+    @media (max-width: $large-width) {
+      margin-top: 25px;
+      grid-column: 1;
+      grid-row: 3;
+    }
+  }
+
+  &.team-2 {
+    grid-column: 3;
+    grid-row: 2;
+
+    @media (max-width: $large-width) {
+      margin-top: 25px;
+      grid-column: 2;
+      grid-row: 3;
+    }
+  }
 }
 
 .card-container {
   grid-column: 2;
   width: 100%;
-  max-width: 600px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -73,6 +116,10 @@
   margin-bottom: 5px;
   text-align: center;
   margin: 10px 0 30px 0;
+
+  @media (max-width: $small-width) {
+    margin: 0 0 20px 0;
+  }
 }
 
 .start-container {
@@ -135,9 +182,17 @@
   margin-bottom: 5px;
   text-transform: uppercase;
 
+  @media (max-width: $large-width) {
+    grid-column: 1 / span 2;
+  }
+
   h1 {
     font-size: 2em;
     font-weight: 500;
+
+    @media (max-width: $small-width) {
+      margin: 0;
+    }
   }
 }
 
@@ -159,6 +214,11 @@
 .player-container {
   display: flex;
   column-gap: 20px;
+  row-gap: 20px;
+
+  @media (max-width: $small-width) {
+    flex-direction: column;
+  }
 
   .card-container {
     display: flex;
@@ -208,8 +268,21 @@
 }
 
 .play-area {
-  width: 500px;
-  height: 400px;
+  min-height: 400px;
+  min-width: 550px;
+
+  @media (max-width: $large-width) {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+  }
+
+  @media (max-width: $medium-width) {
+    min-width: 475px;
+  }
+
+  @media (max-width: $small-width) {
+    min-width: 0px;
+  }
 }
 
 .overlay {
@@ -245,5 +318,9 @@
     margin-bottom: 5px;
     text-align: center;
     color: #fff;
+  }
+
+  @media (max-width: $medium-width) {
+    display: none;
   }
 }

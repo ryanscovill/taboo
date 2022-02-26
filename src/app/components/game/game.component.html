@@ -11,10 +11,10 @@
 <div class="content-container">
   <div class="game-container" *ngIf="game" [ngClass]="{'waiting': game?.state === 'waiting'}">
     <ng-container *ngIf="game?.state !== 'waiting'">
-      <div class="players-card card grid-col-1 grid-row-2">
+      <div class="players-card card team-1">
       <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
       </div>
-      <div class="players-card card grid-col-3 grid-row-2">
+      <div class="players-card card team-2">
         <game-players [players]="game?.team2" [currentPlayer]="currentPlayer" [team]="2" [teamScore]="game?.team2Score"></game-players>
       </div>
     </ng-container>
