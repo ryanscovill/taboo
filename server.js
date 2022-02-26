@@ -94,6 +94,8 @@ const joinTeam = (gameId, playerId, team) => {
     games[gameId].players.find(player => player.id === playerId).active = true;
     games[gameId].players.find(player => player.id === playerId).ready = false;
     games[gameId].players.find(player => player.id === playerId).score = 0;
+    // move player to back of array to keep alternating game order
+    games[gameId].players.push(games[gameId].players.splice(games[gameId].players.indexOf(getPlayer(gameId, playerId)), 1)[0]);
 };
 
 const getPlayer = (gameId, playerId) => {
