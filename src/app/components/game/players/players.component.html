@@ -4,7 +4,7 @@
   <div class="players-list">
     <div class="player-item" *ngFor="let p of players" [ngClass]="{'current-player': currentPlayer.id === p.id}">
       <span class="player-name">{{p.name}}</span>
+      <span class="player-score">{{p.score}}</span>
     </div>
   </div>
-
 </div>
