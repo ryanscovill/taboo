@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { PlayersComponent } from './components/game/players/players.component';
 import { JoinDialogComponent } from './components/join-dialog/join-dialog.component';
 import { ChatboxComponent } from './components/game/chatbox/chatbox.component';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ChatboxComponent } from './components/game/chatbox/chatbox.component';
     GameComponent,
     PlayersComponent,
     JoinDialogComponent,
-    ChatboxComponent
+    ChatboxComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,8 @@
+
+<button class="button-pushable" [type]="type" [disabled]="disabled">
+  <span class="button-shadow"></span>
+  <span class="button-edge" [ngClass]="color"></span>
+  <span class="button-front text" [ngClass]="color">
+    <ng-content></ng-content>
+  </span>
+</button>

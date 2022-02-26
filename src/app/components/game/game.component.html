@@ -33,19 +33,19 @@
           <div class="players">
             <div class="player-item" *ngFor="let player of game.team1" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
           </div>
-          <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 1" (click)="joinTeam(1)">Join</button></div>
+          <div class="button-container"><app-button [disabled]="playerService.player?.team == 1" (click)="joinTeam(1)">Join</app-button></div>
           <div class="team-title"><h2>Team 2</h2></div>
           <div class="players">
             <div class="player-item" *ngFor="let player of game.team2" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
           </div>
-          <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 2" (click)="joinTeam(2)">Join</button></div>
+          <div class="button-container"><app-button [disabled]="playerService.player?.team == 2" (click)="joinTeam(2)">Join</app-button></div>
         </div>
       </div>
       <div class="game-over" *ngIf="game?.state === 'finished'">
         <div class="center">
           <h1 *ngIf="game?.team1Score === game?.team2Score">Teams tied!</h1>
           <h1 *ngIf="game?.team1Score !== game?.team2Score">Team {{game?.team1Score > game?.team2Score ? '1' : '2'}} won!</h1>
-          <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">Play Again</button>
+          <app-button (click)="startGame()" [disabled]="playerService.player?.ready">Play Again</app-button>
         </div>
       </div>
       <div class="playing-container" *ngIf="game?.state === 'playing'">
@@ -55,7 +55,7 @@
             <div class="hint">{{ game.word?.word }}</div>
             <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
           </div>
-          <div class="center btn-row"><button mat-raised-button (click)="badWord()">Said it!</button></div>
+          <div class="center btn-row"><app-button (click)="badWord()">Said it!</app-button></div>
         </div>
 
         <div *ngIf="myTurn">
@@ -65,7 +65,7 @@
                 <div class="word">{{ game.word?.word }}</div>
                 <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
               </div>
-              <button mat-raised-button (click)="skipWord()">Skip</button>
+              <app-button (click)="skipWord()" color="grey">Skip</app-button>
             </div>
             <div *ngIf="myTeam">
               <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
@@ -88,7 +88,7 @@
           <div *ngIf="game?.currentPlayerIndex > 0 || game?.round > 1"><h3>Turn Points: {{game?.turnScore}}</h3></div>
           <div *ngIf="myTurn">
             <h1>Your turn next</h1>
-            <button mat-raised-button (click)="startMyTurn()" color="primary">Let's Go</button>
+            <app-button (click)="startMyTurn()">Let's Go</app-button>
           </div>
           <div *ngIf="!myTurn">
             <h1>Waiting for {{game?.currentPlayer.name}} to start...</h1>
@@ -98,7 +98,7 @@
     </div>
 
     <div class="start" *ngIf="game?.state === 'waiting'">
-      <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">I'm Ready</button>
+      <app-button (click)="startGame()" [disabled]="playerService.player?.ready">I'm Ready</app-button>
     </div>
   </div>
 
@@ -106,8 +106,11 @@
     <h3>Game Log</h3>
     <app-chatbox #messageBox [messageList]="gameLog" [height]="'600px'"></app-chatbox>
   </div>
-
-  <div class="skip-turn" *ngIf="game?.state === 'playing'">
-    <button *ngIf="myTurn" mat-raised-button (click)="skipTurn()">Skip My Turn</button>
-  </div>
 </div>
+<footer>
+  <div></div>
+  <div class="credits"><span><a href="https://ryanscovill.com" target="_blank">website</a> | <a href="https://www.buymeacoffee.com/rscovill" target="_blank">buy me a coffee</a></span></div>
+  <div class="skip-turn" *ngIf="game?.state === 'playing'">
+    <button class="text-button" *ngIf="myTurn" (click)="skipTurn()" color="grey">Skip My Turn</button>
+  </div>
+</footer>

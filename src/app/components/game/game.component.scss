@@ -1,6 +1,7 @@
 $large-width: 1350px;
 $medium-width: 875px;
 $small-width: 500px;
+$primary-color: #F26970;
 
 .header {
   height: 40px;
@@ -35,7 +36,7 @@ $small-width: 500px;
   grid-template-columns: 1fr 300px;
   column-gap: 15px;
   align-items: center;
-  height: calc(100% - 40px);
+  height: calc(100vh - 40px - 40px);
 
   @media (max-width: $medium-width) {
     grid-template-columns: 1fr;
@@ -225,8 +226,8 @@ $small-width: 500px;
     flex-direction: column;
     align-items: center;
 
-    button {
-      margin-top: 10px;
+    app-button {
+      margin-top: 15px;
     }
   }
 
@@ -254,17 +255,11 @@ $small-width: 500px;
 
   .word {
     padding: 10px;
-    background-color: #F26970;
+    background-color: $primary-color;
     color: #fff;
     margin-bottom: 5px;
     font-size: 18px;
   }
-}
-
-.skip-turn {
-  position: absolute;
-  right: 0;
-  bottom: 0;
 }
 
 .play-area {
@@ -300,7 +295,7 @@ $small-width: 500px;
   }
 
   &.wrong {
-    background: red;
+    background: $primary-color;
   }
 }
 
@@ -324,3 +319,40 @@ $small-width: 500px;
     display: none;
   }
 }
+
+footer {
+  width: 100%;
+  height: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  a, span {
+    color: #d1b1c5;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #fff;
+  }
+
+  .credits {
+    justify-self: center;
+
+    @media (max-width: $medium-width) {
+      grid-column: 1 / span 2;
+    }
+  }
+
+  .skip-turn {
+    justify-self: right;
+  }
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+

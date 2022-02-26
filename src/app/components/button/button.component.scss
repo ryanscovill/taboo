@@ -1,0 +1,124 @@
+.button-pushable {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.button-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: hsl(0deg 0% 0% / 0.25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+.button-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(
+    to left,
+    hsl(4deg 100% 16%) 0%,
+    hsl(4deg 100% 32%) 8%,
+    hsl(4deg 100% 32%) 92%,
+    hsl(4deg 100% 16%) 100%
+  );
+
+  &.grey {
+    background: linear-gradient(
+      to left,
+      hsl(0deg 0% 16%) 0%,
+      hsl(0deg 0% 32%) 8%,
+      hsl(0deg 0% 32%) 92%,
+      hsl(0deg 0% 16%) 100%
+    );
+  }
+}
+
+.button-front {
+  display: block;
+  position: relative;
+  padding: 5px 15px;
+  border-radius: 12px;
+  font-size: 15px;
+  will-change: transform;
+  transform: translateY(-4px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+
+  &.primary {
+    background: #FD655A;
+    color: white;
+  }
+
+  &.grey {
+    background: #c4c4c4;
+    color: black;
+  }
+}
+
+@media (min-width: 768px) {
+  .button-front {
+    font-size: 17px;
+    padding: 8px 25px;
+  }
+}
+
+.button-pushable:hover {
+  filter: brightness(110%);
+}
+
+.button-pushable:hover:not(:disabled) .button-front {
+  transform: translateY(-6px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.button-pushable:active:not(:disabled) .button-front {
+  transform: translateY(-2px);
+  transition: transform 34ms;
+}
+
+.button-pushable:hover:not(:disabled) .button-shadow {
+  transform: translateY(4px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.button-pushable:active:not(:disabled) .button-shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+
+.button-pushable:focus:not(:focus-visible) {
+  outline: none;
+}
