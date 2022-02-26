@@ -1,108 +1,113 @@
-<div class="player">
-  <span>{{ playerService.player?.name }}</span>
+<div class="header">
+  <div *ngIf="game?.round" class="round">
+    <span>Round: {{ game?.round }} / {{ game?.rounds }}</span>
+  </div>
+  <div *ngIf="!game?.round"></div>
+  <img class="logo" src="../../../assets/images/taboo.svg" alt="logo" class="logo">
+  <div class="player">
+    <span>{{ playerService.player?.name }}</span>
+  </div>
 </div>
-<div *ngIf="game?.round" class="round">
-  <span>Round: {{ game?.round }} / {{ game?.rounds }}</span>
-</div>
-<div class="game-container" *ngIf="game">
-  <ng-container *ngIf="game?.state !== 'waiting'">
-    <div class="players-card card grid-col-1 grid-row-2">
-    <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
-    </div>
-    <div class="players-card card grid-col-3 grid-row-2">
-      <game-players [players]="game?.team2" [currentPlayer]="currentPlayer" [team]="2" [teamScore]="game?.team2Score"></game-players>
-    </div>
-  </ng-container>
-  <div class="title center"><h1>{{title}}</h1></div>
-  <div class="card-container card play-area">
-    <div *ngIf="cardAction" class="overlay center" [ngClass]="cardAction">
-      <div class="overlay-title" [ngSwitch]="cardAction">
-        <span *ngSwitchCase="'skipped'">Skipped</span>
-        <span *ngSwitchCase="'correct'">Correct</span>
-        <span *ngSwitchCase="'wrong'">Taboo</span>
+<div class="content-container">
+  <div class="game-container" *ngIf="game" [ngClass]="{'waiting': game?.state === 'waiting'}">
+    <ng-container *ngIf="game?.state !== 'waiting'">
+      <div class="players-card card grid-col-1 grid-row-2">
+      <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
       </div>
-    </div>
-    <div class="start-container" *ngIf="game?.state === 'waiting'">
-      <div class="team-container">
-        <div class="team-title"><h2>Team 1</h2></div>
-        <div class="players">
-          <div class="player-item" *ngFor="let player of game.team1" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
+      <div class="players-card card grid-col-3 grid-row-2">
+        <game-players [players]="game?.team2" [currentPlayer]="currentPlayer" [team]="2" [teamScore]="game?.team2Score"></game-players>
+      </div>
+    </ng-container>
+    <div class="title center"><h1>{{title}}</h1></div>
+    <div class="card-container card play-area">
+      <div *ngIf="cardAction" class="overlay center" [ngClass]="cardAction">
+        <div class="overlay-title" [ngSwitch]="cardAction">
+          <span *ngSwitchCase="'skipped'">Skipped</span>
+          <span *ngSwitchCase="'correct'">Correct</span>
+          <span *ngSwitchCase="'wrong'">Taboo</span>
         </div>
-        <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 1" (click)="joinTeam(1)">Join</button></div>
-        <div class="team-title"><h2>Team 2</h2></div>
-        <div class="players">
-          <div class="player-item" *ngFor="let player of game.team2" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
-        </div>
-        <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 2" (click)="joinTeam(2)">Join</button></div>
       </div>
-    </div>
-    <div class="game-over" *ngIf="game?.state === 'finished'">
-      <div class="center">
-        <h1 *ngIf="game?.team1Score === game?.team2Score">Teams tied!</h1>
-        <h1 *ngIf="game?.team1Score !== game?.team2Score">Team {{game?.team1Score > game?.team2Score ? '1' : '2'}} won!</h1>
-        <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">Play Again</button>
-      </div>
-    </div>
-    <div class="playing-container" *ngIf="game?.state === 'playing'">
-      <div class="timer">{{formatSeconds(game?.timer)}}</div>
-      <div *ngIf="!myTeam">
-        <div class="game-card">
-          <div class="hint">{{ game.word?.word }}</div>
-          <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
-        </div>
-        <div class="center btn-row"><button mat-raised-button (click)="badWord()">Said it!</button></div>
-      </div>
-
-      <div *ngIf="myTurn">
-        <div class="player-container">
-          <div class="card-container">
-            <div class="game-card">
-              <div class="word">{{ game.word?.word }}</div>
-              <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
-            </div>
-            <button mat-raised-button (click)="skipWord()">Skip</button>
+      <div class="start-container" *ngIf="game?.state === 'waiting'">
+        <div class="team-container">
+          <div class="team-title"><h2>Team 1</h2></div>
+          <div class="players">
+            <div class="player-item" *ngFor="let player of game.team1" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
           </div>
+          <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 1" (click)="joinTeam(1)">Join</button></div>
+          <div class="team-title"><h2>Team 2</h2></div>
+          <div class="players">
+            <div class="player-item" *ngFor="let player of game.team2" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
+          </div>
+          <div class="button-container"><button mat-raised-button [disabled]="playerService.player?.team == 2" (click)="joinTeam(2)">Join</button></div>
+        </div>
+      </div>
+      <div class="game-over" *ngIf="game?.state === 'finished'">
+        <div class="center">
+          <h1 *ngIf="game?.team1Score === game?.team2Score">Teams tied!</h1>
+          <h1 *ngIf="game?.team1Score !== game?.team2Score">Team {{game?.team1Score > game?.team2Score ? '1' : '2'}} won!</h1>
+          <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">Play Again</button>
+        </div>
+      </div>
+      <div class="playing-container" *ngIf="game?.state === 'playing'">
+        <div class="timer">{{formatSeconds(game?.timer)}}</div>
+        <div *ngIf="!myTeam">
+          <div class="game-card">
+            <div class="hint">{{ game.word?.word }}</div>
+            <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+          </div>
+          <div class="center btn-row"><button mat-raised-button (click)="badWord()">Said it!</button></div>
+        </div>
+
+        <div *ngIf="myTurn">
+          <div class="player-container">
+            <div class="card-container">
+              <div class="game-card">
+                <div class="word">{{ game.word?.word }}</div>
+                <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+              </div>
+              <button mat-raised-button (click)="skipWord()">Skip</button>
+            </div>
+            <div *ngIf="myTeam">
+              <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!myTurn && myTeam">
           <div *ngIf="myTeam">
             <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
+            <div class="message-input">
+              <input autofocus [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
+            </div>
           </div>
         </div>
       </div>
 
-      <div *ngIf="!myTurn && myTeam">
-        <div *ngIf="myTeam">
-          <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
-          <div class="message-input">
-            <input autofocus [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
+      <div class="between-turns" *ngIf="game?.state === 'between_round'">
+        <div class="center">
+          <div *ngIf="game?.currentPlayerIndex > 0 || game?.round > 1"><h3>Turn Points: {{game?.turnScore}}</h3></div>
+          <div *ngIf="myTurn">
+            <h1>Your turn next</h1>
+            <button mat-raised-button (click)="startMyTurn()" color="primary">Let's Go</button>
+          </div>
+          <div *ngIf="!myTurn">
+            <h1>Waiting for {{game?.currentPlayer.name}} to start...</h1>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="between-turns" *ngIf="game?.state === 'between_round'">
-      <div class="center">
-        <div *ngIf="game?.currentPlayerIndex > 0 || game?.round > 1"><h3>Turn Points: {{game?.turnScore}}</h3></div>
-        <div *ngIf="myTurn">
-          <h1>Your turn next</h1>
-          <button mat-raised-button (click)="startMyTurn()" color="primary">Let's Go</button>
-        </div>
-        <div *ngIf="!myTurn">
-          <h1>Waiting for {{game?.currentPlayer.name}} to start...</h1>
-        </div>
-      </div>
+    <div class="start" *ngIf="game?.state === 'waiting'">
+      <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">I'm Ready</button>
     </div>
   </div>
 
-  <div class="start" *ngIf="game?.state === 'waiting'">
-    <button mat-raised-button (click)="startGame()" [disabled]="playerService.player?.ready">I'm Ready</button>
+  <div *ngIf="game && game?.state !== 'waiting'" class="game-updates">
+    <h3>Game Log</h3>
+    <app-chatbox #messageBox [messageList]="gameLog" [height]="'600px'"></app-chatbox>
+  </div>
+
+  <div class="skip-turn" *ngIf="game?.state === 'playing'">
+    <button *ngIf="myTurn" mat-raised-button (click)="skipTurn()">Skip My Turn</button>
   </div>
 </div>
-
-<div *ngIf="game && game?.state !== 'waiting'" class="game-updates">
-  <h3>Game Log</h3>
-  <app-chatbox #messageBox [messageList]="gameLog" [height]="'600px'"></app-chatbox>
-</div>
-
-<div class="skip-turn" *ngIf="game?.state === 'playing'">
-  <button *ngIf="myTurn" mat-raised-button (click)="skipTurn()">Skip My Turn</button>
-</div>
-
