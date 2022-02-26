@@ -42,6 +42,12 @@ $primary-color: #F26970;
   @media (max-width: $medium-width) {
     grid-template-columns: 1fr;
   }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .game-container {
