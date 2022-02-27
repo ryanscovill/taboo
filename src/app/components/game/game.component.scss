@@ -325,6 +325,10 @@ $primary-color: #F26970;
   @media (max-width: $medium-width) {
     display: none;
   }
+
+  @media (max-height: 800px) {
+    align-self: start;
+  }
 }
 
 footer {

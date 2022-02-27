@@ -8,7 +8,7 @@ import { Message } from 'src/app/models/message.model';
 })
 export class ChatboxComponent implements OnInit {
   @Input() messageList: Message[] = [];
-  @Input() height: string = '300px';
+  @Input() layout: string = 'normal';
   @ViewChild('messageListElement') private scrollContainer: ElementRef;
 
   constructor() { }

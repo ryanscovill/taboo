@@ -1,4 +1,4 @@
-<div class="messages" [ngStyle]="{'height': height}" #messageListElement>
+<div class="messages" [ngClass]="layout" #messageListElement>
   <p *ngFor="let m of messageList">
     <strong>{{m.playerName}}</strong> : {{m.message}}
   </p>
