@@ -9,7 +9,7 @@
   </div>
 </div>
 <div class="content-container">
-  <div class="game-container" *ngIf="game" [ngClass]="{'waiting': game?.state === 'waiting'}">
+  <div class="game-container" *ngIf="game && game?.state !== 'waiting'">
     <ng-container *ngIf="game?.state !== 'waiting'">
       <div class="players-card card team-1">
       <game-players [players]="game?.team1" [currentPlayer]="currentPlayer" [team]="1" [teamScore]="game?.team1Score"></game-players>
@@ -25,20 +25,6 @@
           <span *ngSwitchCase="'skipped'">Skipped</span>
           <span *ngSwitchCase="'correct'">Correct</span>
           <span *ngSwitchCase="'wrong'">Taboo</span>
-        </div>
-      </div>
-      <div class="start-container" *ngIf="game?.state === 'waiting'">
-        <div class="team-container">
-          <div class="team-title"><h2>Team 1</h2></div>
-          <div class="players">
-            <div class="player-item" *ngFor="let player of game.team1" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
-          </div>
-          <div class="button-container"><app-button [disabled]="playerService.player?.team == 1" (click)="joinTeam(1)">Join</app-button></div>
-          <div class="team-title"><h2>Team 2</h2></div>
-          <div class="players">
-            <div class="player-item" *ngFor="let player of game.team2" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
-          </div>
-          <div class="button-container"><app-button [disabled]="playerService.player?.team == 2" (click)="joinTeam(2)">Join</app-button></div>
         </div>
       </div>
       <div class="game-over" *ngIf="game?.state === 'finished'">
@@ -96,15 +82,29 @@
         </div>
       </div>
     </div>
-
-    <div class="start" *ngIf="game?.state === 'waiting'">
-      <app-button (click)="startGame()" [disabled]="playerService.player?.ready">I'm Ready</app-button>
-    </div>
   </div>
-
   <div *ngIf="game && game?.state !== 'waiting'" class="game-updates">
     <h3>Game Log</h3>
     <app-chatbox #messageBox [messageList]="gameLog" layout="tall"></app-chatbox>
+  </div>
+  <div *ngIf="game?.state === 'waiting'" class="waiting">
+    <div class="start-container">
+      <div class="team-container card">
+        <div class="team-title"><h2>Team 1</h2></div>
+        <div class="players">
+          <div class="player-item" *ngFor="let player of game.team1" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
+        </div>
+        <div class="button-container"><app-button [disabled]="playerService.player?.team == 1" (click)="joinTeam(1)">Join</app-button></div>
+        <div class="team-title"><h2>Team 2</h2></div>
+        <div class="players">
+          <div class="player-item" *ngFor="let player of game.team2" [ngClass]="{'ready': player.ready}">{{player.name}}</div>
+        </div>
+        <div class="button-container"><app-button [disabled]="playerService.player?.team == 2" (click)="joinTeam(2)">Join</app-button></div>
+      </div>
+      <div class="start" *ngIf="game?.state === 'waiting'">
+        <app-button (click)="startGame()" [disabled]="playerService.player?.ready">I'm Ready</app-button>
+      </div>
+    </div>
   </div>
 </div>
 <footer>

@@ -64,10 +64,11 @@ $primary-color: #F26970;
   @media (max-width: $small-width) {
     width: 100%;
   }
+}
 
-  &.waiting {
-    grid-column: 1 / span 2;
-  }
+.waiting {
+  grid-column: 1 / span 2;
+  justify-self: center;
 }
 
 .card {
@@ -155,9 +156,13 @@ $primary-color: #F26970;
 .team-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  column-gap: 75px;
   justify-items: center;
   width: 100%;
-  min-width: 500px;
+
+  @media (max-width: $small-width) {
+    column-gap: 20px;
+  }
 
   .team-title {
     grid-row: 1;
@@ -169,12 +174,13 @@ $primary-color: #F26970;
   }
 
   .button-container {
+    margin-top: 15px;
     grid-row: 3;
   }
 }
 
 .start {
-  grid-column: 2;
+  grid-column: 1 / span 2;
   margin-top: 20px;
   justify-self: center;
 }
