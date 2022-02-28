@@ -61,9 +61,9 @@
 .button-front {
   display: block;
   position: relative;
-  padding: 5px 15px;
+  padding: 8px 25px;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 17px;
   will-change: transform;
   transform: translateY(-4px);
   transition:
@@ -79,13 +79,6 @@
   &.grey {
     background: #c4c4c4;
     color: black;
-  }
-}
-
-@media (min-width: 768px) {
-  .button-front {
-    font-size: 17px;
-    padding: 8px 25px;
   }
 }
 
