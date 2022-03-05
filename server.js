@@ -106,6 +106,11 @@ const getCurrentPlayer = (gameId) => {
     return games[gameId].players[games[gameId].currentPlayerIndex];
 };
 
+
+const sanitize_guess = (str) => {
+    return str.trim().toLowerCase().replace(/[-\s]/g,"");
+};
+
 io.on("connection", (socket) => {
     console.log(" a user connected");
 
@@ -182,7 +187,7 @@ io.on("connection", (socket) => {
 
     socket.on('message', (data) => {
         const gameId = socket.gameId;
-        if (data.message.toString().trim().toLowerCase() === games[gameId].word.word.toLowerCase()) {
+        if (sanitize_guess(data.message.toString()) === sanitize_guess(games[gameId].word.word)) {
             data.turnWord = true;
             io.to(gameId).emit('message', data);
             games[gameId].turnScore += 1;
