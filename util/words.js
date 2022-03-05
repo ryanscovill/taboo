@@ -12,6 +12,7 @@ async function run() {
     await client.connect();
     const database = client.db("taboo");
     words = await database.collection("words").find().toArray();
+    console.log('loaded words from db');
   } finally {
     await client.close();
   }
@@ -24,14 +25,18 @@ run().catch(console.dir);
 
 class WordHelper {
     currentWord = '';
+    usedWords = {};
 
-    getWord = () => {
-        let newWord = words[Math.floor(Math.random() * words.length)];
-        if (newWord === this.currentWord) {
-            return this.getWord();
-        }
-        this.currentWord = newWord;
-        return this.currentWord;
+    getWord = (gameId) => {
+      if (!this.usedWords[gameId]) {
+        this.usedWords[gameId] = [];
+      }
+      let newWord = words[Math.floor(Math.random() * words.length)];
+      if (this.usedWords[gameId].includes(newWord.word)) {
+          return this.getWord();
+      }
+      this.usedWords[gameId].push(newWord.word);
+      return newWord;
     };
 }
 

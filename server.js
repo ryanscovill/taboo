@@ -45,7 +45,7 @@ const getNextPlayer = (gameId) => {
 }
 
 const setWord = (gameId) => {
-    games[gameId].word = wordHelper.getWord();
+    games[gameId].word = wordHelper.getWord(gameId);
 }
 
 
