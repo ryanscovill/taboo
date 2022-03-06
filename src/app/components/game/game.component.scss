@@ -372,4 +372,15 @@ footer {
   cursor: pointer;
 }
 
+.game-link {
+  color: #fff;
+  margin-bottom: 20px;
 
+  input {
+    margin-left: 10px;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    width: 240px;
+  }
+}

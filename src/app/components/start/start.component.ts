@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { SocketioService } from 'src/app/services/socketio.service';
-import { v4 as uuidv4 } from 'uuid';
+import ShortUniqueId from 'short-unique-id';
 
 @Component({
   selector: 'app-start',
@@ -29,7 +29,7 @@ export class StartComponent implements OnInit {
   };
 
   createGame() {
-    const gameId = uuidv4();
+    const gameId = new ShortUniqueId()();
     this.playerService.createPlayer(this.startForm.get('name').value, gameId);
     this.socketioService.createGame(gameId, this.startForm.get('turnTime').value, this.startForm.get('rounds').value, this.playerService.player);
     this.router.navigate(['/game', gameId])

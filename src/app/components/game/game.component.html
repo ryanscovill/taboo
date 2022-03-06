@@ -89,6 +89,7 @@
   </div>
   <div *ngIf="game?.state === 'waiting'" class="waiting">
     <div class="start-container">
+      <p class="game-link">Invite <input [value]="gameLink" readonly ngxClipboard [cbContent]="gameLink" (cbOnSuccess)="copiedLink($event)"></p>
       <div class="team-container card">
         <div class="team-title"><h2>Team 1</h2></div>
         <div class="players">

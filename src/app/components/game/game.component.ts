@@ -207,4 +207,13 @@ export class GameComponent implements OnInit {
     return ' ';
   }
 
+  get gameLink(): string {
+    return window.location.href;
+  }
+
+  copiedLink(event) {
+    this.snackBar.open('Copied to clipboard', '', {
+      duration: 3000
+    });
+  }
 }
