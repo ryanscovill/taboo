@@ -4,8 +4,15 @@
   </div>
   <div *ngIf="!game?.round"></div>
   <img class="logo" src="../../../assets/images/taboo.svg" alt="logo" class="logo">
-  <div class="player">
-    <span>{{ playerService.player?.name }}</span>
+  <div class="user">
+    <div class="help">
+      <button mat-icon-button (click)="openHelpDialog()">
+        <mat-icon class="white-icon">help</mat-icon>
+      </button>
+    </div>
+    <div class="player">
+      <span>{{ playerService.player?.name }}</span>
+    </div>
   </div>
 </div>
 <div class="content-container">
@@ -89,7 +96,7 @@
   </div>
   <div *ngIf="game?.state === 'waiting'" class="waiting">
     <div class="start-container">
-      <p class="game-link">Invite <input [value]="gameLink" readonly ngxClipboard [cbContent]="gameLink" (cbOnSuccess)="copiedLink($event)"></p>
+      <p class="game-link"><input [value]="gameLink" readonly><button ngxClipboard [cbContent]="gameLink" (cbOnSuccess)="copiedLink($event)" class="text-button">Copy</button></p>
       <div class="team-container card">
         <div class="team-title"><h2>Team 1</h2></div>
         <div class="players">
@@ -108,10 +115,4 @@
     </div>
   </div>
 </div>
-<footer>
-  <div></div>
-  <div class="credits"><span><a href="https://ryanscovill.com" target="_blank">website</a> | <a href="https://www.buymeacoffee.com/rscovill" target="_blank">buy me a coffee</a></span></div>
-  <div class="skip-turn" *ngIf="game?.state === 'playing'">
-    <button class="text-button" *ngIf="myTurn" (click)="skipTurn()" color="grey">Skip My Turn</button>
-  </div>
-</footer>
+<app-footer [game]="game" [myTurn]="myTurn" (handleSkipTurn)="skipTurn()"></app-footer>

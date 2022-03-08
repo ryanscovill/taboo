@@ -1,0 +1,7 @@
+<footer [ngClass]="{'skip': myTurn}">
+  <div></div>
+  <div class="credits"><span><a href="https://ryanscovill.com" target="_blank">website</a> | <a href="https://www.buymeacoffee.com/rscovill" target="_blank">buy me a coffee</a></span></div>
+  <div class="skip-turn" *ngIf="game?.state === 'playing'">
+    <button class="text-button" *ngIf="myTurn" (click)="skipTurn($event)" color="grey">Skip My Turn</button>
+  </div>
+</footer>

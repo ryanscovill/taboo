@@ -8,6 +8,7 @@ import { Message } from 'src/app/models/message.model';
 import { Player } from 'src/app/models/player.model';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { SocketioService } from 'src/app/services/socketio.service';
+import { HelpComponent } from '../help/help.component';
 import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
 
@@ -102,6 +103,12 @@ export class GameComponent implements OnInit {
         data => this.socketIoService.joinGame(this.gameId, this.playerService.createPlayer(data.name, this.gameId))
     );
 }
+
+  openHelpDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    this.dialog.open(HelpComponent, dialogConfig);
+  }
 
   receiveJoinedPlayers() {
     this.socketIoService.receiveJoinedPlayers().subscribe((data: string) => {

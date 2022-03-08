@@ -14,6 +14,8 @@ import { JoinDialogComponent } from './components/join-dialog/join-dialog.compon
 import { ChatboxComponent } from './components/game/chatbox/chatbox.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import { HelpComponent } from './components/help/help.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { ClipboardModule } from 'ngx-clipboard';
     PlayersComponent,
     JoinDialogComponent,
     ChatboxComponent,
-    ButtonComponent
+    ButtonComponent,
+    HelpComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

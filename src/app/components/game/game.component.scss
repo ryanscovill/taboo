@@ -21,13 +21,21 @@ $primary-color: #F26970;
     justify-self: center;
   }
 
-  .player {
-    color: #fff;
-    background: rgb(121, 23, 88);
-    padding: 10px;
-    border-radius: 5px;
-    width: fit-content;
+  .user {
+    display: flex;
     justify-self: right;
+
+    .help {
+      margin-right: 5px;
+    }
+
+    .player {
+      color: #fff;
+      background: rgb(121, 23, 88);
+      padding: 10px;
+      border-radius: 5px;
+      width: fit-content;
+    }
   }
 }
 
@@ -337,47 +345,12 @@ $primary-color: #F26970;
   }
 }
 
-footer {
-  width: 100%;
-  height: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-
-  a, span {
-    color: #d1b1c5;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: #fff;
-  }
-
-  .credits {
-    justify-self: center;
-
-    @media (max-width: $medium-width) {
-      grid-column: 1 / span 2;
-    }
-  }
-
-  .skip-turn {
-    justify-self: right;
-  }
-}
-
-.text-button {
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-}
-
 .game-link {
   color: #fff;
   margin-bottom: 20px;
 
   input {
-    margin-left: 10px;
+    margin-right: 10px;
     padding: 8px;
     border-radius: 8px;
     border: none;

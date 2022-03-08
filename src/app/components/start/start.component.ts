@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerService } from 'src/app/services/player/player.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 import ShortUniqueId from 'short-unique-id';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { HelpComponent } from '../help/help.component';
 
 @Component({
   selector: 'app-start',
@@ -13,7 +15,11 @@ import ShortUniqueId from 'short-unique-id';
 export class StartComponent implements OnInit {
   startForm: FormGroup;
 
-  constructor(private router: Router, private playerService: PlayerService, private socketioService: SocketioService, private route: ActivatedRoute) { }
+  constructor(private router: Router,
+    private playerService: PlayerService,
+    private socketioService: SocketioService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.clearLocalStorage();
@@ -33,5 +39,11 @@ export class StartComponent implements OnInit {
     this.playerService.createPlayer(this.startForm.get('name').value, gameId);
     this.socketioService.createGame(gameId, this.startForm.get('turnTime').value, this.startForm.get('rounds').value, this.playerService.player);
     this.router.navigate(['/game', gameId])
+  }
+
+  openHelpDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    this.dialog.open(HelpComponent, dialogConfig);
   }
 }

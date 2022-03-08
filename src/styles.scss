@@ -54,3 +54,18 @@ body {
 .red-snackbar {
   background-color: #8d1a18;
 }
+
+.white-icon {
+  color: white;
+}
+
+.white-icon svg {
+  fill: white;
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
