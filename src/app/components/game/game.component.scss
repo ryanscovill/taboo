@@ -357,3 +357,8 @@ $primary-color: #F26970;
     width: 280px;
   }
 }
+
+.flex-container {
+  display: flex;
+  column-gap: 10px;
+}

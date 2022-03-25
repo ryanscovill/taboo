@@ -43,12 +43,20 @@
       </div>
       <div class="playing-container" *ngIf="game?.state === 'playing'">
         <div class="timer">{{formatSeconds(game?.timer)}}</div>
-        <div *ngIf="!myTeam">
-          <div class="game-card">
-            <div class="hint">{{ game.word?.word }}</div>
-            <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+        <div class="flex-container">
+          <div *ngIf="!myTeam">
+            <div class="game-card">
+              <div class="hint">{{ game.word?.word }}</div>
+              <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
+            </div>
+            <div class="center btn-row"><app-button (click)="badWord()">Said it!</app-button></div>
           </div>
-          <div class="center btn-row"><app-button (click)="badWord()">Said it!</app-button></div>
+          <div *ngIf="!myTurn">
+            <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
+            <div *ngIf="myTeam" class="message-input">
+              <input autofocus [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
+            </div>
+          </div>
         </div>
 
         <div *ngIf="myTurn">
@@ -62,15 +70,6 @@
             </div>
             <div *ngIf="myTeam">
               <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="!myTurn && myTeam">
-          <div *ngIf="myTeam">
-            <app-chatbox #messageBox [messageList]="messageList"></app-chatbox>
-            <div class="message-input">
-              <input autofocus [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()">
             </div>
           </div>
         </div>
