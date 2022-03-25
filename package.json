@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build --prod",
+    "build": "ng build",
+    "deploy": "ng build --aot --prod --output-hashing none && gcloud app deploy",
     "dev": "nodemon server.js",
     "test": "ng test",
     "lint": "ng lint",
