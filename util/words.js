@@ -1,10 +1,11 @@
 'use strict';
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
 let words = [];
 
 // read only access
-const uri = "mongodb+srv://access:F5qohL9CwriwkNRJ@cluster0.9q6g2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = process.env.MONGO_READ_URI;
 const client = new MongoClient(uri);
 async function run() {
   try {
