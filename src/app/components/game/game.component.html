@@ -34,6 +34,8 @@
           <span *ngSwitchCase="'wrong'">Taboo</span>
         </div>
       </div>
+
+      <!-- Game Over -->
       <div class="game-over" *ngIf="game?.state === 'finished'">
         <div class="center">
           <h1 *ngIf="game?.team1Score === game?.team2Score">Teams tied!</h1>
@@ -41,12 +43,14 @@
           <app-button (click)="startGame()" [disabled]="playerService.player?.ready">Play Again</app-button>
         </div>
       </div>
+
+      <!-- Other Team -->
       <div class="playing-container" *ngIf="game?.state === 'playing'">
         <div class="timer">{{formatSeconds(game?.timer)}}</div>
         <div class="flex-container">
           <div *ngIf="!myTeam">
             <div class="game-card">
-              <div class="hint">{{ game.word?.word }}</div>
+              <div class="hint hint-word">{{ game.word?.word }}</div>
               <div class="hint" *ngFor="let hint of game.word?.hints">{{ hint }}</div>
             </div>
             <div class="center btn-row"><app-button (click)="badWord()">Said it!</app-button></div>
@@ -59,6 +63,7 @@
           </div>
         </div>
 
+        <!-- My Turn -->
         <div *ngIf="myTurn">
           <div class="player-container">
             <div class="card-container">
@@ -75,6 +80,7 @@
         </div>
       </div>
 
+      <!-- Between Turns -->
       <div class="between-turns" *ngIf="game?.state === 'between_round'">
         <div class="center">
           <div *ngIf="game?.currentPlayerIndex > 0 || game?.round > 1"><h3>Turn Points: {{game?.turnScore}}</h3></div>
@@ -93,6 +99,8 @@
     <h3>Game Log</h3>
     <app-chatbox #messageBox [messageList]="gameLog" layout="tall"></app-chatbox>
   </div>
+
+  <!-- Game Team Lobby -->
   <div *ngIf="game?.state === 'waiting'" class="waiting">
     <div class="start-container">
       <p class="game-link"><input [value]="gameLink" readonly><button ngxClipboard [cbContent]="gameLink" (cbOnSuccess)="copiedLink($event)" class="text-button">Copy</button></p>
@@ -114,4 +122,5 @@
     </div>
   </div>
 </div>
+
 <app-footer [game]="game" [myTurn]="myTurn" (handleSkipTurn)="skipTurn()"></app-footer>
