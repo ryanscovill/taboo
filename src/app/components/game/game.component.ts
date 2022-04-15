@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +17,7 @@ import { ChatboxComponent } from './chatbox/chatbox.component';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
   @ViewChildren('messageBox') messageBoxes: QueryList<ChatboxComponent>;
 
   gameId: string;
@@ -29,6 +29,7 @@ export class GameComponent implements OnInit {
   gameLog: GameAction[] = [];
   newMessage: string;
   cardAction: string;
+  timerInterval: any;
 
   correctSound: HTMLAudioElement;
   wrongSound: HTMLAudioElement;
@@ -45,6 +46,12 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.playerService.getPlayerFromStorage(this.gameId);
+
+    this.timerInterval = setInterval(() => {
+      if (this.game) {
+        this.game.timer --;
+      }
+    }, 1000);
 
     if (!this.playerService.player) {
       this.openJoinDialog();
@@ -77,6 +84,10 @@ export class GameComponent implements OnInit {
     });
 
     this.loadSounds();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timerInterval);
   }
 
   loadSounds() {

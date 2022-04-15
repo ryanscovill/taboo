@@ -71,6 +71,7 @@ const turnEnded = (gameId) => {
     clearInterval(timers[gameId]);
     games[gameId].state = 'between_round';
     games[gameId].currentPlayerIndex = getNextPlayer(gameId);
+    io.to(gameId).emit('gameUpdate', games[gameId]);
 }
 
 const endGame = (gameId) => {
@@ -83,10 +84,9 @@ const endGame = (gameId) => {
 
 const gameTick = (gameId) => {
     games[gameId].timer --;
-    if (games[gameId].timer < 1) {
+    if (games[gameId].timer <= 1) {
        turnEnded(gameId);
     }
-    io.to(gameId).emit('gameUpdate', games[gameId]);
 };
 
 const joinTeam = (gameId, playerId, team) => {
