@@ -28,12 +28,16 @@ class WordHelper {
     usedWords = {};
 
     getWord = (gameId) => {
+
       if (!this.usedWords[gameId]) {
         this.usedWords[gameId] = [];
       }
-      let newWord = words[Math.floor(Math.random() * words.length)];
+      let newWord = words[Math.floor(Math.random() * 10)];
       if (this.usedWords[gameId].includes(newWord.word)) {
-          return this.getWord();
+        if (this.usedWords[gameId].length === words.length - 1) {
+          this.usedWords[gameId] = [];
+        }
+        return this.getWord(gameId);
       }
       this.usedWords[gameId].push(newWord.word);
       return newWord;
