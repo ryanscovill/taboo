@@ -32,7 +32,7 @@ class WordHelper {
       if (!this.usedWords[gameId]) {
         this.usedWords[gameId] = [];
       }
-      let newWord = words[Math.floor(Math.random() * 10)];
+      let newWord = words[Math.floor(Math.random() * words.length)];
       if (this.usedWords[gameId].includes(newWord.word)) {
         if (this.usedWords[gameId].length === words.length - 1) {
           this.usedWords[gameId] = [];
