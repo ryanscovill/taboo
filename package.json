@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build",
+    "build": "ng build --watch",
     "deploy": "ng build --aot --prod --output-hashing none && gcloud app deploy",
     "dev": "nodemon server.js",
     "test": "ng test",
@@ -26,6 +26,7 @@
     "@types/uuid": "^8.3.4",
     "body-parser": "^1.19.2",
     "express": "^4.17.3",
+    "js-levenshtein": "^1.1.6",
     "mongodb": "^4.4.0",
     "ngx-clipboard": "^15.0.1",
     "rxjs": "~6.6.0",

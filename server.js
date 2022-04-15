@@ -1,6 +1,7 @@
 const express = require('express');
 const { clearInterval } = require('timers');
 const { WordHelper } = require('./util/words.js');
+const levenshtein = require('js-levenshtein');
 
 
 // angular app
@@ -187,7 +188,10 @@ io.on("connection", (socket) => {
 
     socket.on('message', (data) => {
         const gameId = socket.gameId;
-        if (sanitize_guess(data.message.toString()) === sanitize_guess(games[gameId].word.word)) {
+        let playerGuess = sanitize_guess(data.message.toString());
+        let word = sanitize_guess(games[gameId].word.word);
+        let closeness = levenshtein(playerGuess, word);
+        if (closeness <= Math.max(1, word.length / 4)) {
             data.turnWord = true;
             io.to(gameId).emit('message', data);
             games[gameId].turnScore += 1;
