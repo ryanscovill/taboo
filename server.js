@@ -179,6 +179,8 @@ io.on("connection", (socket) => {
 
     socket.on('badWord', () => {
         const gameId = socket.gameId;
+        games[gameId].turnScore --;
+        games[gameId].players[games[gameId].currentPlayerIndex].score --;
         io.to(gameId).emit('notification', { action: 'wrong', playerName: getPlayer(gameId, socket.playerId).name, message: `caught ${getCurrentPlayer(gameId).name} for ${games[gameId].word.word}`});
         setWord(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
