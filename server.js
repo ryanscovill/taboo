@@ -49,7 +49,6 @@ const setWord = (gameId) => {
     games[gameId].word = wordHelper.getWord(gameId);
 }
 
-
 const startTurn = (gameId) => {
     games[gameId].state = 'playing';
     games[gameId].turnScore = 0;
@@ -107,7 +106,6 @@ const getCurrentPlayer = (gameId) => {
     return games[gameId].players[games[gameId].currentPlayerIndex];
 };
 
-
 const sanitize_guess = (str) => {
     return str.trim().toLowerCase().replace(/[-\s]/g,"");
 };
@@ -153,9 +151,9 @@ io.on("connection", (socket) => {
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
-    socket.on('startGame', (data) => {
-        const gameId = data.gameId;
-        const playerId = data.playerId;
+    socket.on('startGame', () => {
+        const gameId = socket.gameId;
+        const playerId = socket.playerId;
         games[gameId].players.find(player => player.id === playerId).ready = true;
 
         let readyCount = games[gameId].players.filter(player => player.ready === true).length;
@@ -166,22 +164,22 @@ io.on("connection", (socket) => {
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
-    socket.on('startTurn', (data) => {
-        const gameId = data.gameId;
+    socket.on('startTurn', () => {
+        const gameId = socket.gameId;
         games[gameId] = startTurn(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
-    socket.on('skipWord', (data) => {
-        const gameId = data.gameId;
+    socket.on('skipWord', () => {
+        const gameId = socket.gameId;
         io.to(gameId).emit('notification', { action: 'skipped', playerName: getCurrentPlayer(gameId).name, message: `skipped ${games[gameId].word.word}` });
         setWord(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
 
-    socket.on('badWord', (data) => {
-        const gameId = data.gameId;
-        io.to(gameId).emit('notification', { action: 'wrong', playerName: getPlayer(gameId, data.playerId).name, message: `caught ${getCurrentPlayer(gameId).name} for ${games[gameId].word.word}`});
+    socket.on('badWord', () => {
+        const gameId = socket.gameId;
+        io.to(gameId).emit('notification', { action: 'wrong', playerName: getPlayer(gameId, socket.playerId).name, message: `caught ${getCurrentPlayer(gameId).name} for ${games[gameId].word.word}`});
         setWord(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
@@ -196,7 +194,7 @@ io.on("connection", (socket) => {
             io.to(gameId).emit('message', data);
             games[gameId].turnScore += 1;
             games[gameId].players[games[gameId].currentPlayerIndex].score += 1;
-            io.to(gameId).emit('notification', { action: 'correct', playerName: getPlayer(gameId, data.playerId).name, message: `correctly guessed ${games[gameId].word.word}` });
+            io.to(gameId).emit('notification', { action: 'correct', playerName: getPlayer(gameId, socket.playerId).name, message: `correctly guessed ${games[gameId].word.word}` });
             setWord(gameId);
             io.to(gameId).emit('gameUpdate', games[gameId]);
         } else {
@@ -204,8 +202,8 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on('skipTurn', (data) => {
-        const gameId = data.gameId;
+    socket.on('skipTurn', () => {
+        const gameId = socket.gameId;
         turnEnded(gameId);
         io.to(gameId).emit('gameUpdate', games[gameId]);
     });
